@@ -1,4 +1,4 @@
-function envVisualization(x, y, vx, vy, r, x_ego, y_ego, vx_ego, vy_ego, r_ego)
+function envVisualization(x, y, x_ego, y_ego, theta_ego)
     % Vehicle dimensions
     car_width = 1.5;
     car_length = 3;
@@ -56,7 +56,16 @@ function envVisualization(x, y, vx, vy, r, x_ego, y_ego, vx_ego, vy_ego, r_ego)
         end
 
         % Draw the ego vehicle as a blue rectangle
-        rectangle('Position', [x_ego(t) - car_length/2, y_ego(t) - car_width/2, car_length, car_width], 'EdgeColor', 'b', 'FaceColor', 'b');
+        % Create a polyshape for the ego vehicle
+        ego_x = x_ego(t) + [-car_length/2, car_length/2, car_length/2, -car_length/2];
+        ego_y = y_ego(t) + [-car_width/2, -car_width/2, car_width/2, car_width/2];
+        ego_shape = polyshape(ego_x, ego_y);
+
+        % Rotate the ego vehicle
+        ego_shape = rotate(ego_shape, theta_ego(t) * 360 / 2.0 / pi, [x_ego(t), y_ego(t)]);
+
+        % Plot the ego vehicle
+        plot(ego_shape, 'FaceColor', 'b', 'EdgeColor', 'b');
         text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
