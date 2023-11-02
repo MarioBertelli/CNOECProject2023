@@ -48,14 +48,16 @@ function envVisualization(x, y, vx, vy, r, x_ego, y_ego, vx_ego, vy_ego, r_ego)
 
         % Draw lanes or other environmental elements if necessary
 
-        % Draw vehicles as rectangles
+        % Draw vehicles as rectangles and add numbers
         hold on;
         for i = 1:size(x, 2)
             rectangle('Position', [x(t, i) - car_length/2, y(t, i) - car_width/2, car_length, car_width], 'EdgeColor', 'r', 'FaceColor', 'r');
+            text(x(t, i), y(t, i), num2str(i), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
         end
 
         % Draw the ego vehicle as a blue rectangle
         rectangle('Position', [x_ego(t) - car_length/2, y_ego(t) - car_width/2, car_length, car_width], 'EdgeColor', 'b', 'FaceColor', 'b');
+        text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3
