@@ -1,4 +1,12 @@
 function envVisualization(x, y, x_ego, y_ego, theta_ego)
+    % ENVVISUALIZATION - Create an animated visualization of an environment with vehicles.
+    % Input:
+    %   x: Matrix of x-coordinates of other vehicles at different time steps (MxN), where M is the number of time steps, and N is the number of vehicles.
+    %   y: Matrix of y-coordinates of other vehicles at different time steps (MxN), corresponding to the x-coordinates.
+    %   x_ego: Vector of x-coordinates of the ego vehicle at different time steps (Mx1).
+    %   y_ego: Vector of y-coordinates of the ego vehicle at different time steps (Mx1).
+    %   theta_ego: Vector of ego vehicle orientations in radians at different time steps (Mx1).
+
     % Vehicle dimensions
     car_width = 1.5;
     car_length = 3;
