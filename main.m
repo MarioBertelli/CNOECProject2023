@@ -3,12 +3,12 @@ clear all
 clc
 
 % Plant model parameters initialization
-run('plantModelInit.m');
 run('simPlannerInit.m');
+run('plantModelInit.m');
 
 %Call function that gives x and y coordinate matrices of the N vehicles
 %based on previous settings
-[x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps);
+[x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
 
 % Dynamical model resolution with ode45
 tic
@@ -17,7 +17,7 @@ for ind=2:N_o45
     zout_o45(:,ind)     =   zout_temp.y(:,end);
     [~,F]               =   vehicle(0,zout_o45(:,ind),uout_o45(:,ind-1),0,th);
     Fout_o45(:,ind)     =   F;
-    uout_o45(:,ind)     =   uout_o45(:,1);
+    % uout_o45(:,ind)     =   uout_o45(:,1);
 end
 t_o45=toc;
 

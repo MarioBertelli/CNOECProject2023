@@ -21,7 +21,7 @@ th      =       [m;Jz;a;b;Cf;Cr;rw;mu;Tdmax;Tdmin;dmax;dmin;Af;Al;Cx;Rr;rho];
 %% Simulation: Initial state
 X       =       0;          % inertial X position (m)
 Y       =       0;          % inertial Y position (m)
-Ux      =       1;          % body x velocity (m/s)
+Ux      =       20;          % body x velocity (m/s)
 beta    =       0;          % sideslip angle (rad)
 psi     =       0;          % yaw angle (rad)
 r       =       0;          % yaw rate (rad/s)
@@ -32,8 +32,8 @@ Td_step             =       Tdmax/2.5;
 delta_step          =       dmax/15;
 %% Simulation with ode45
 % Time integration parameters
-Ts_o45      =       1e-1;               % sampling time (s)
-Tend_o45    =       100;                % final time (s)
+Ts_o45      =       Ts_simulation;      % sampling time (s)
+Tend_o45    =       simulation_duration;                % final time (s)
 tvec_o45    =       0:Ts_o45:Tend_o45;  % time vector (s)
 % Initialize simulation output
 N_o45               =       length(tvec_o45);   % number of samples
@@ -43,12 +43,12 @@ Fout_o45            =       zeros(6,N_o45);     % matrix with forces
 zout_o45(:,1)       =       z0;
 %uout_o45(:,1)       =       [Td_step;delta_step];
 %Provvisory input maneuever TO BE ASSIGNED ACCORDING TO CONTROL STRATEGY
-for i=1:(Tend_o45/Ts_o45+1)/3
+for i=1:floor(N_o45/8)
     uout_o45(2,i)=delta_step;
 end
-for i=floor((Tend_o45/Ts_o45+1)/3):(Tend_o45/Ts_o45+1)/3*2
+for i=floor(N_o45/8):floor(2/8*N_o45)
     uout_o45(2,i)=-delta_step;
 end
-for i=floor((Tend_o45/Ts_o45+1)/3*2):(Tend_o45/Ts_o45+1)-1
+for i=floor(2/8*N_o45):floor(N_o45)
     uout_o45(2,i)=0;
 end
