@@ -36,7 +36,8 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     % Add other customizations to the visualization environment here
 
     % Begin creating the animation
-    for t = 1:size(x, 1)
+    sample_skip = 100;
+    for t = 1:sample_skip:size(x, 1)
         % Calculate distances between ego vehicle and all other vehicles
         distances = sqrt((x_ego(t) - x(t, :)).^2 + (y_ego(t) - y(t, :)).^2);
 
@@ -89,10 +90,10 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
         drawnow;
 
         % Capture the frame and add it to the video
-        writeVideo(outputVideo, getframe(gcf));
+        % writeVideo(outputVideo, getframe(gcf));
 
         % You can also add a delay to control the animation speed
-        pause(0.03); % Set the desired delay in seconds
+        pause(0.01); % Set the desired delay in seconds
     end
 
     % Close the video file
