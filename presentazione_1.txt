@@ -1,0 +1,35 @@
+############INTRODUZIONE TM############ 1.5 MINUTO ( 1 SLIDE )
+Fede:
+Mario:
+Mattia:
+immagine profilo
+
+############problem description and motivation############ 2 MINUTI ( 1 / 2 SLIDE )
+schema che spiega il contesto (input) -> schema a blocchi esterno
+
+
+############system description############ 1 MINUTO ( 2 SLIDE )
+schema a blocchi del nostro, sceenshoot simulazione
+
+############optimization variables############ 2 MINUTI ( 1/2 SLIDE )
+stile presentazione prof (stato veicoli vicini)
+immagine sigle track + immagine modello a velocità costante ( motivazione modellizzazione -> ipotesi fatte)
+
+############cost and constraints description############ 2.5 MINUTI ( 2 SLIDE )
+COST:
+- tracking error cost ( lateral error( variabili intere?), speed error, heading error)
+- somma(1/distanza) -> distance cost
+
+SOFT:
+ - distanza di sicurezza (per poter inizializzare il problema) -> safe_distance
+HARD:
+ - distanza minima -> minimum_distance
+
+
+
+################################################## 1 MINUTI
+##########Examples of simulated system trajectories######### ( 2 SLIDE )
+Video, sceenshoot
+grafico distanza ego / altri veicoli
+
+
