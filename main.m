@@ -1,25 +1,29 @@
 close all
 clear all
+clc
 
 % Generate random sample data with constant y-coordinates, different starting x-positions, and varying x-coordinates based on velocities
 N = 8;  % Number of vehicles
 num_time_steps = 50;  % Number of time steps
 
-% Generate random y-coordinates (constant values for all time steps)
-y = repmat(randi(N-2, 1, N)*2.0, num_time_steps, 1);
+% Initial x coordinate of every vehicle
+x0=[10, 20, 30, 40, 50, 60, 70, 80];
+% Initial lane (y coordinate) of every vehicle
+lane0=[1, 2, 3, 1, 2, 3, 1, 2];
+% Constant velocity of every vehicle
+vx=[10, 40, 30, 10, 20, 10, 15, 20];
+% Time instant at which every vehicle switches lane (leave 0 if not)
+tSwitch=[num_time_steps/8, num_time_steps/7, num_time_steps/6, num_time_steps/5, num_time_steps/4, num_time_steps/3, num_time_steps/2, num_time_steps/1];
+%tSwitch=[10, 0, 0, 0, ]
+% Lane in which every vehicle hoes at time specified into tSwitch
+laneSwitch=[2, 1, 2, 2, 3, 2, 2, 3];
 
-% Generate random velocities and radii for the vehicles (varying for each vehicle)
-vx = bsxfun(@times, rand(num_time_steps, N), (1:N)) * 0.2; % Vary the increase based on the vehicle index
-
-% Generate random starting x-positions for each 
-
-start_x = rand(1, N) * 15;
-
-% Calculate x-coordinates based on velocities, considering starting positions
-x = cumsum(vx, 1) + repmat(start_x, num_time_steps, 1);
+%Call function that gives x and y coordinate matrices of the N vehicles
+%based on previous settings
+[x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps);
 
 % Generate random constant y-coordinate for the ego vehicle
-y_ego = repmat(randi(N-2)*2.0, num_time_steps, 1);
+y_ego = repmat(randi(3), num_time_steps, 1);
 
 % Generate random positions and velocities for the ego vehicle (single entry)
 x_ego = cumsum(rand(num_time_steps, 1) * 0.3) + randi(5);  % Vary the increase based on time steps
