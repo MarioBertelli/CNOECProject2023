@@ -26,8 +26,8 @@ torque_0_init = 100;
 x0      =       [torque_0_init*ones(Np,1);     % Torque (Nm),
                 zeros(Np,1)];       % Steering angle (rad)
 
-%% Initialize model states
-
+%% Speed reference
+V_ref = 80/3.6;
 %% Constraints
 % Bounds on input variables
 C       =       [-eye(2*Np)
@@ -55,7 +55,7 @@ myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0);
 
 % Run solver
-[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,y_lanes),x0,[],[],C,d,0,q,myoptions);
+[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,y_lanes,V_ref),x0,[],[],C,d,0,q,myoptions);
 
 
 

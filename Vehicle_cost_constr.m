@@ -1,4 +1,4 @@
-function v = Vehicle_cost_constr(x,Ts,Np,th,z0,y_ref)
+function v = Vehicle_cost_constr(x,Ts,Np,th,z0,y_ref,V_ref)
 % Function that computes the trajectory of the vehicle model
 % introduced in Lab. session A and returns the cost function
 % and the non linear equality and inequality constraints
@@ -30,7 +30,7 @@ Y_sim       =   z_sim(2,1:Nblock:end)';
 V_sim       =   z_sim(3,1:Nblock:end)';
 PSI_sim     =   z_sim(5,1:Nblock:end)';
 %% Compute path constraints h(x)
-h           =   [-V_sim + 80/3.6];
+h           =   [-V_sim + 130/3.6];
 
 %% Compute cost function f(x)
 % y_ref [y0_ref, y1_ref, y2_ref]
@@ -40,12 +40,13 @@ Td_diff     =   (x(2:Np,1)-x(1:Np-1,1));
 final_X = X_sim(end,1);
 heading_error = PSI_sim;
 lateral_error = y_ref(3) - Y_sim;
-
-f           =   -final_X + ...
-                1e2*(delta_diff'*delta_diff)+ ...
+speed_error = V_ref - V_sim;
+% -2*e-2*final_X + ...
+f           =   1e2*(delta_diff'*delta_diff)+ ...
                 1e-5*(Td_diff'*Td_diff) + ...
                 1e1*(heading_error'*heading_error) + ...
-                1e-3*(lateral_error'*lateral_error);
+                1e-3*(lateral_error'*lateral_error) + ...
+                5e-2*(speed_error'*speed_error);
 
 %% Stack cost and constraints
 v           =   [f;h];
