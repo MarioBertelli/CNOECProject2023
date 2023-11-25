@@ -19,8 +19,8 @@ rho     =       1.2;                % air density (kg/m^3)
 th      =       [m;Jz;a;b;Cf;Cr;rw;mu;Tdmax;Tdmin;dmax;dmin;Af;Al;Cx;Rr;rho];
 
 %% Simulation: Initial state
-X       =       0;          % inertial X position (m)
-Y       =       0;          % inertial Y position (m)
+X       =       15;          % inertial X position (m)
+Y       =       2;          % inertial Y position (m)
 Ux      =       20;          % body x velocity (m/s)
 beta    =       0;          % sideslip angle (rad)
 psi     =       0;          % yaw angle (rad)
