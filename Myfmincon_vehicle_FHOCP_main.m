@@ -26,8 +26,10 @@ distances = sqrt((x_ego(t) - x(t, :)).^2 + (y_ego(t) - y(t, :)).^2);
 
 % Select the three nearest vehicles
 nearest_indices = sorted_indices(1:3);
-z_neighboring = x(t, nearest_indices)'; % [x_nearest_vehicle_i, ...]
-speeds_neighboring = vx(nearest_indices)';
+z_neighboring = zeros(3*3,1); %3 states for each vehicle x,y,theta
+z_neighboring(1:3:end) = x(t, nearest_indices); % fill the initial x
+speeds_neighboring = zeros(size(z_neighboring));
+speeds_neighboring(1:3:end) = vx(nearest_indices);
 
 %% FHOCP parameters - single shooting
 Ts      =       0.5;                % seconds, input sampling period

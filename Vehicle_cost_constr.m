@@ -17,7 +17,7 @@ time_FFD    =   [0:0.01:(Np-1)*Ts];
 Nblock      =   Ts/0.01;
 Nsim_FFD    =   length(time_FFD);
 
-z_sim      =   zeros(6+3,Nsim_FFD);
+z_sim      =   zeros(6+9,Nsim_FFD);
 z_sim(:,1) =   z0;
 
 for ind=2:Nsim_FFD
@@ -35,8 +35,8 @@ V_sim       =   z_sim(3,1:Nblock:end)';
 PSI_sim     =   z_sim(5,1:Nblock:end)';
 
 distance_nearest_vehicle_1 = abs(z_sim(7,:)' - X_sim) + 0.1;    % TODO temp distance as x difference right now
-distance_nearest_vehicle_2 = abs(z_sim(8,:)' -  X_sim) + 0.1;    % TODO temp distance as x difference right now
-distance_nearest_vehicle_3 = abs(z_sim(9,:)' - X_sim) + 0.1;   % TODO temp distance as x difference right now
+distance_nearest_vehicle_2 = abs(z_sim(10,:)' -  X_sim) + 0.1;    % TODO temp distance as x difference right now
+distance_nearest_vehicle_3 = abs(z_sim(13,:)' - X_sim) + 0.1;   % TODO temp distance as x difference right now
 % interpolate distances to have a finer grane proximity definition
 % distance_nearest_vehicle_1 = interp1(distance_nearest_vehicle_1, 1:)
 
