@@ -1,4 +1,4 @@
-function [z_sim] = Vehicle_traj(x,Ts,Np,th,z0)
+function [z_sim] = Vehicle_traj(x,Ts,Np,th,z0_main, simulation_Ts)
 % Function that computes the trajectory of the vehicle model
 % introduced in Lab. session A and returns the system state together with
 % plots of the relevant quantities
@@ -8,18 +8,18 @@ t_in        =   [0:Ts:(Np-1)*Ts]';
 u_in        =   [x(1:Np,1)';
                 x(Np+1:end,1)'];
 
-assignin('base','z0',z0);
+assignin('base','z0',z0_main);
 assignin('base','t_in',t_in);
 assignin('base','u_in',u_in);
 
 
 %% Run simulation with FFD
-time_FFD    =   [0:0.01:(Np-1)*Ts];
-Nblock      =   Ts/0.01;
+time_FFD    =   [0:simulation_Ts:((Np)*Ts-simulation_Ts)];
+Nblock      =   Ts/simulation_Ts;
 Nsim_FFD    =   length(time_FFD);
 
 z_sim      =   zeros(6,Nsim_FFD);
-z_sim(:,1) =   z0;
+z_sim(:,1) =   z0_main;
 for ind=2:Nsim_FFD
     u                   =   u_in(:,1+floor(time_FFD(ind)/Ts));
     zdot               =   vehicle(0,z_sim(:,ind-1),u,0,th);
