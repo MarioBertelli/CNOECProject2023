@@ -28,6 +28,7 @@ distances = sqrt((x_ego(t) - x(t, :)).^2 + (y_ego(t) - y(t, :)).^2);
 nearest_indices = sorted_indices(1:3);
 z_neighboring = zeros(3*3,1); %3 states for each vehicle x,y,theta
 z_neighboring(1:3:end) = x(t, nearest_indices); % fill the initial x
+z_neighboring(2:3:end) = y(t, nearest_indices); % fill the initial y
 speeds_neighboring = zeros(size(z_neighboring));
 speeds_neighboring(1:3:end) = vx(nearest_indices);
 

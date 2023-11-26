@@ -29,24 +29,33 @@ for ind=2:Nsim_FFD
     z_sim(:,ind)       =   z_sim(:,ind-1)+Ts/Nblock*zdot;
 end
 
-X_sim       =   z_sim(1,:)';
+XY_sim_complete    =   z_sim(1:2,:)';
+XY_sim_near1_complete = z_sim(7:8,:)';
+XY_sim_near2_complete = z_sim(10:11,:)';
+XY_sim_near3_complete = z_sim(13:14,:)';
+
 Y_sim       =   z_sim(2,1:Nblock:end)';
 V_sim       =   z_sim(3,1:Nblock:end)';
 PSI_sim     =   z_sim(5,1:Nblock:end)';
 
-distance_nearest_vehicle_1 = abs(z_sim(7,:)' - X_sim) + 0.1;    % TODO temp distance as x difference right now
-distance_nearest_vehicle_2 = abs(z_sim(10,:)' -  X_sim) + 0.1;    % TODO temp distance as x difference right now
-distance_nearest_vehicle_3 = abs(z_sim(13,:)' - X_sim) + 0.1;   % TODO temp distance as x difference right now
-% interpolate distances to have a finer grane proximity definition
-% distance_nearest_vehicle_1 = interp1(distance_nearest_vehicle_1, 1:)
-
+% compute mahalanobis distance from near vehicles 
+C = [3  0;
+     0  1;]; % TODO TUNATA A CASO, car aspect ratio?
+distance_nearest_vehicle_1 = sqrt(sum((XY_sim_near1_complete - XY_sim_complete)*inv(C).*(XY_sim_near1_complete - XY_sim_complete),2));
+distance_nearest_vehicle_2 = sqrt(sum((XY_sim_near2_complete - XY_sim_complete)*inv(C).*(XY_sim_near2_complete - XY_sim_complete),2));
+distance_nearest_vehicle_3 = sqrt(sum((XY_sim_near3_complete - XY_sim_complete)*inv(C).*(XY_sim_near3_complete - XY_sim_complete),2));
+% avoid division by 0:
+distance_nearest_vehicle_1 = distance_nearest_vehicle_1 + 0.05;
+distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
+distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
 
 delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
 
+car_width = 1.5;
 %% Compute path constraints h(x)
 h           =   [-V_sim + 130/3.6;
-                 Y_sim + 2;
-                 -Y_sim + 10
+                 Y_sim + 2 - car_width*1.3;
+                 -Y_sim + 10 - car_width * 1.3
                  delta_diff + 0.1
                  -delta_diff + 0.1];
  
@@ -65,8 +74,8 @@ proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ..
 f           =   1e3*(delta_diff'*delta_diff)+ ...
                 1e-5*(Td_diff'*Td_diff) + ...
                 1e2*(heading_error'*heading_error) + ...
-                5e-1*(lateral_error'*lateral_error) + ...
-                5e-5*(speed_error'*speed_error) + ...
+                6e-1*(lateral_error'*lateral_error) + ...
+                5e-2*(speed_error'*speed_error) + ...
                 1e1* proximity;
 
 
