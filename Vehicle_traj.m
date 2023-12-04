@@ -30,10 +30,12 @@ X_sim       =   z_sim(1,1:end);
 Y_sim       =   z_sim(2,1:end);
 
 %% Plot (X,Y) trajectory and constraints
-Ymin        =   tanh((X_sim-100)/2e1)*10+5;
-Ymax        =   tanh((X_sim-75)/2e1)*10+15;
+Ymin        =   X_sim*0+9.5;
+Ymax        =   X_sim*0+0.5;
+YfirstLine       =   X_sim*0+3.5;
+YsecondLine      =   X_sim*0+6.5;
 
-figure(1),subplot(2,2,1),plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k'),grid on
+figure(1),subplot(2,2,1),plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--'),grid on
 xlabel('X (m)'),ylabel('Y (m)')
 subplot(2,2,2),plot(time_FFD,z_sim(3,:)),grid on
 xlabel('Time (s)'),ylabel('Longitudinal speed (m/s)')

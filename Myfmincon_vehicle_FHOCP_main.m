@@ -15,7 +15,7 @@ run('plantModelInit.m');
 %based on previous settings
 [x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
 
- % Calculate distances between ego vehicle and all other vehicles
+% Calculate distances between ego vehicle and all other vehicles
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
