@@ -84,7 +84,7 @@ fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref);
 [z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
 
 debugFig=figure;
-set(debugFig, 'Position', [0, 420, 1700, 380]); % Adjust the size as needed
+set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
 subplot(2,3,1);plot(delta_diff);title('delta diff');
 subplot(2,3,2);plot(Td_diff);title('Td diff');
 subplot(2,3,3);plot(heading_error);title('heading error');
