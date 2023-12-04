@@ -32,7 +32,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     % Create a figure and set the axis limits
     fig = figure;
     % Increase the figure size and resolution
-    set(fig, 'Position', [100, 100, 1200, 800]); % Adjust the size as needed
+    set(fig, 'Position', [100, 100, 800, 480]); % Adjust the size as needed
     set(fig, 'PaperPositionMode', 'auto');
     set(fig, 'Renderer', 'Painters'); % Use the 'Painters' renderer for vector graphics
 
