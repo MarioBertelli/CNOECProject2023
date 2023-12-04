@@ -33,7 +33,7 @@ speeds_neighboring = zeros(size(z_neighboring));
 speeds_neighboring(1:3:end) = vx(nearest_indices);
 
 %% FHOCP parameters - single shooting
-Ts      =       0.5;                % seconds, input sampling period
+Ts      =       0.1;                % seconds, input sampling period
 Tend    =       simulation_duration;% seconds, terminal time
 Np      =       Tend/Ts;            % prediction horizon
 
@@ -75,11 +75,24 @@ myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0_main, Ts_simulation);
 
 % Run solver
-[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref),x0,[],[],C,d,0,q,myoptions);
+fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref);
+[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
 
 
 
 %% Visualize results
 [z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
 
+debugFig=figure;
+set(debugFig, 'Position', [0, 420, 1700, 380]); % Adjust the size as needed
+subplot(2,3,1);plot(delta_diff);title('delta diff');
+subplot(2,3,2);plot(Td_diff);title('Td diff');
+subplot(2,3,3);plot(heading_error);title('heading error');
+subplot(2,3,4);plot(lateral_error);title('lateral error');
+subplot(2,3,5);plot(speed_error);title('speed error');
+subplot(2,3,6);plot(proximity);title('proximity');
+
+
 envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)');
+
+%%debugVisualization(Np, delta_diff, Td_diff, heading_err, lateral_err, speed_err, proximity);

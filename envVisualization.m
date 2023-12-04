@@ -31,8 +31,9 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
     % Create a figure and set the axis limits
     fig = figure;
+
     % Increase the figure size and resolution
-    set(fig, 'Position', [100, 100, 800, 480]); % Adjust the size as needed
+    set(fig, 'Position', [0, 0, 1700, 350]); % Adjust the size as needed
     set(fig, 'PaperPositionMode', 'auto');
     set(fig, 'Renderer', 'Painters'); % Use the 'Painters' renderer for vector graphics
 
@@ -60,8 +61,11 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         % Set the axis limits to maintain fixed dimensions
         axis equal;
-        % xlim([x_min, x_max]);
-        xlim([x_ego(t) - x_view_before_after, x_ego(t) + x_view_before_after]);
+        
+        %ax1=subplot(5,4,[13 14 15 16 17 18 19 20]);
+        title('Environment Visualization'),xlabel('xSim [m]'),ylabel('ySim [m]');
+        xlim([x_min, x_max]);
+        %xlim([x_ego(t) - x_view_before_after, x_ego(t) + x_view_before_after]);
         ylim([y_min, y_max]);
 
         % Draw lanes or other environmental elements if necessary
@@ -101,6 +105,37 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         hold off;
 
+        %Subplots
+
+%         %Subplot 1
+%         subplot(5,4,1);
+%         plot(t,debugInfo(1,:),'k');
+%         title('delta_diff');
+% 
+%         %Subplot 2
+%         subplot(5,4,2);
+%         plot(t,debugInfo(2,:));
+%         title('Td_diff');
+% 
+%         %Subplot 3
+%         subplot(5,4,3);
+%         plot(t,debugInfo(3,:));
+%         title('heading_error');
+% 
+%         %Subplot 4
+%         subplot(5,4,4);
+%         plot(t,debugInfo(4,:));
+%         title('lateral_error');
+% 
+%         %Subplot 5
+%         subplot(5,4,5);
+%         plot(t,debugInfo(5,:));
+%         title('speed_error');
+% 
+%         %Subplot 6
+%         subplot(5,4,6);
+%         plot(t,debugInfo(6,:));
+%         title('proximity');
         % Add any indicators or annotations for constraints or bounds
 
         % Update the visualization
@@ -111,6 +146,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         % You can also add a delay to control the animation speed
         pause(0.01); % Set the desired delay in seconds
+
     end
 
     % Close the video file

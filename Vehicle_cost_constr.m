@@ -71,6 +71,16 @@ proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ..
             +(1./distance_nearest_vehicle_2)'*(1./distance_nearest_vehicle_2) ...
             +(1./distance_nearest_vehicle_3)'*(1./distance_nearest_vehicle_3);
 % -2*e-2*final_X + ...
+
+%Assign to workspace some useful 'global' quantities
+assignin('base','delta_diff',delta_diff);
+assignin('base','Td_diff',Td_diff);
+assignin('base','heading_error',heading_error);
+assignin('base','lateral_error',lateral_error);
+assignin('base','speed_error',speed_error);
+assignin('base','proximity',proximity);
+
+
 f           =   1e3*(delta_diff'*delta_diff)+ ...
                 1e-5*(Td_diff'*Td_diff) + ...
                 1e2*(heading_error'*heading_error) + ...

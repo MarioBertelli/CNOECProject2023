@@ -1,6 +1,6 @@
 % Generate random sample data with constant y-coordinates, different starting x-positions, and varying x-coordinates based on velocities
 Ts_simulation = 1e-3;
-simulation_duration = 10;
+simulation_duration = 3;
 num_time_steps = simulation_duration/Ts_simulation;
 
 N = 8;  % Number of vehicles
