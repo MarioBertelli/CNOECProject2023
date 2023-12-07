@@ -72,6 +72,33 @@ proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ..
             +(1./distance_nearest_vehicle_3)'*(1./distance_nearest_vehicle_3);
 % -2*e-2*final_X + ...
 
+%Ellipse safety boundary around cars
+C1=[z_neighbouring(1) z_neighbouring(2)];
+C2=[z_neighbouring(4) z_neighbouring(5)];
+C3=[z_neighbouring(7) z_neighbouring(8)];
+Cego=[z_main(1) z_main(2)];
+[C] = [C1; C2; C3];  % centers
+a = 2 ;      % major axis 
+e = 0.8 ;    % eccentricity 
+b = a*sqrt(1-e^2) ; % minor axis 
+%
+th = linspace(0,2*pi) ; 
+% Ellipse 
+xe=zeros(3,100);
+ye=zeros(3,100);
+xe_ego=zeros(1,100);
+ye_ego=zeros(1,100);
+xe(1,:) = C(1,1)+a*cos(th) ; 
+ye(1,:) = C(1,2)+b*sin(th) ; 
+xe(2,:) = C(2,1)+a*cos(th) ; 
+ye(2,:) = C(2,2)+b*sin(th) ; 
+xe(3,:) = C(3,1)+a*cos(th) ; 
+ye(3,:) = C(3,2)+b*sin(th) ;
+xe_ego(1,:) = Cego(1,1)+a*cos(th) ; 
+ye_ego(1,:) = Cego(1,2)+b*sin(th) ; 
+% plot(xe(1,:),ye(1,:),xe(2,:),ye(2,:),xe(3,:),ye(3,:), xe_ego, ye_ego);
+% axis equal
+
 %Assign to workspace some useful 'global' quantities
 assignin('base','delta_diff',delta_diff);
 assignin('base','Td_diff',Td_diff);

@@ -27,7 +27,7 @@ y_ego=zout_o45(2,:)';
 ego_orientation=zout_o45(5,:)';
 
 % Call the envVisualization function with the sample data
-envVisualization(x, y, x_ego, y_ego, ego_orientation, [10 20 30 40 50 60]);
+envVisualization(x, y, x_ego, y_ego, ego_orientation);
 
 % Plot ego vehicle states
 % figure(1),plot(zout_o45(1,:),zout_o45(2,:)),grid on, hold on,xlabel('X (m)'),ylabel('Y (m)')

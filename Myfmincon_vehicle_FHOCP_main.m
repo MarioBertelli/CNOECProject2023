@@ -33,7 +33,7 @@ speeds_neighboring = zeros(size(z_neighboring));
 speeds_neighboring(1:3:end) = vx(nearest_indices);
 
 %% FHOCP parameters - single shooting
-Ts      =       0.1;                % seconds, input sampling period
+Ts      =       0.5;                % seconds, input sampling period
 Tend    =       simulation_duration;% seconds, terminal time
 Np      =       Tend/Ts;            % prediction horizon
 

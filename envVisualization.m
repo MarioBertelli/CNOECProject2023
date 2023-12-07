@@ -17,6 +17,15 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     y_limit_min = - 2;
     y_limit_max = 10;
     limit_draw_height = 2;
+    %Safety ellipse parameters
+     a = 6 ;      % major axis 
+     e = 0.95 ;    % eccentricity 
+     b = 1.5 ; % minor axis 
+     th = linspace(0,2*pi) ; 
+     xe_ego=zeros(1,100);
+     ye_ego=zeros(1,100);
+     xe=zeros(length(x),100);
+     ye=zeros(length(y),100);
 
     % Set up video file parameters
     outputVideo = VideoWriter('testAnimation.mp4');
@@ -80,9 +89,18 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         % Draw vehicles as rectangles and add numbers
         hold on;
+        
+        %Safety ellipse around vehicles
+        for i=1:size(x, 2)
+            xe(i,:) = x(t,i)+a*cos(th); 
+            ye(i,:) = y(t,i)+b*sin(th);
+        end
+
+        %Plot other vehicles
         for i = 1:size(x, 2)
             rectangle('Position', [x(t, i) - car_length/2, y(t, i) - car_width/2, car_length, car_width], 'EdgeColor', 'r', 'FaceColor', 'r');
             text(x(t, i), y(t, i), num2str(i), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
+            plot(xe(i,:), ye(i,:), 'r');
         end
 
         % Draw the ego vehicle as a blue rectangle
@@ -91,12 +109,17 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
         ego_y = y_ego(t) + [-car_width/2, -car_width/2, car_width/2, car_width/2];
         ego_shape = polyshape(ego_x, ego_y);
 
+        %Safety distance ellipse around ego vehicle
+        xe_ego(1,:) = x_ego(t)+a*cos(th); 
+        ye_ego(1,:) = y_ego(t)+b*sin(th); 
+
         % Rotate the ego vehicle
         ego_shape = rotate(ego_shape, theta_ego(t) * 360 / 2.0 / pi, [x_ego(t), y_ego(t)]);
 
         % Plot the ego vehicle
         plot(ego_shape, 'FaceColor', 'b', 'EdgeColor', 'b');
         text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
+        plot(xe_ego, ye_ego, 'b');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3
