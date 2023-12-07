@@ -112,14 +112,20 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
         %Safety distance ellipse around ego vehicle
         xe_ego(1,:) = x_ego(t)+a*cos(th); 
         ye_ego(1,:) = y_ego(t)+b*sin(th); 
-
+        ERot= zeros(2,100);
+        for i=1:100
+            ERot(:,i)=[cos(theta_ego(t)) -sin(theta_ego(t)); sin(theta_ego(t)) cos(theta_ego(t))] * [xe_ego(1,i)-x_ego(t) ye_ego(1,i)-y_ego(t)]' + [x_ego(t) y_ego(t)]';
+        end
         % Rotate the ego vehicle
         ego_shape = rotate(ego_shape, theta_ego(t) * 360 / 2.0 / pi, [x_ego(t), y_ego(t)]);
-
+        
         % Plot the ego vehicle
         plot(ego_shape, 'FaceColor', 'b', 'EdgeColor', 'b');
         text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
-        plot(xe_ego, ye_ego, 'b');
+        %Plot ellipse around ego vehigle, properly rotated
+        
+        %plot(xe_ego, ye_ego, 'b');
+        plot(ERot(1,:), ERot(2,:),'b');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3
