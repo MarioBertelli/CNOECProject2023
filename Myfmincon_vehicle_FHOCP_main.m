@@ -15,7 +15,7 @@ run('plantModelInit.m');
 %based on previous settings
 [x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
 
-% Calculate distances between ego vehicle and all other vehicles
+ % Calculate distances between ego vehicle and all other vehicles
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
@@ -74,25 +74,35 @@ myoptions.nitermax      =	1e2;
 myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0_main, Ts_simulation);
 
-% Run solver
-fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref);
-[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
+%% Initial guess
+U0          = 0.1*ones(N,1);
+
+%% Simulate with MPC
+Ts_simulation=0.01; % sampling time
+Nsim                =   5/Ts_simulation;
+nz=15; nu=3; ny=1;
+Zsim_MPC            =   zeros((Nsim+1)*nz,1);
+Ysim_MPC            =   zeros(Nsim*ny,1);
+Usim_MPC            =   zeros(Nsim*nu,1);
+Zsim_MPC(1:nz,1)    =   z0; 
+zt                  =   z0;
+tQP                 =   zeros(Nsim-1,1); % serve per la funzione tic toc
+
+for ind=1:Nsim
+        
+    myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0_main, Ts_simulation);
+
+    [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref),x0,[],[],C,d,0,q,myoptions);
+    Usim_MPC((ind-2)*nu+1:(ind-1)*nu,1) =   xstar(1:nu,1);
+    [zdot, ~] = augmented_vehicle_model(t, zt, Usim_MPC, 0, th,  z_neighboring, speeds_neighboring); % lo zero è per il parametro d (wind speed)
+    zt=zt+Ts*zdot;
+    x0=[xstar(2:end);xstar(end)];
+
+end
 
 
 
 %% Visualize results
 [z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
 
-debugFig=figure;
-set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
-subplot(2,3,1);plot(delta_diff);title('delta diff');
-subplot(2,3,2);plot(Td_diff);title('Td diff');
-subplot(2,3,3);plot(heading_error);title('heading error');
-subplot(2,3,4);plot(lateral_error);title('lateral error');
-subplot(2,3,5);plot(speed_error);title('speed error');
-subplot(2,3,6);plot(proximity);title('proximity');
-
-
 envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)');
-
-%%debugVisualization(Np, delta_diff, Td_diff, heading_err, lateral_err, speed_err, proximity);
