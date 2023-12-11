@@ -34,6 +34,7 @@ XY_sim_near1_complete = z_sim(7:8,:)';
 XY_sim_near2_complete = z_sim(10:11,:)';
 XY_sim_near3_complete = z_sim(13:14,:)';
 
+X_sim       =   z_sim(1,1:Nblock:end)';
 Y_sim       =   z_sim(2,1:Nblock:end)';
 V_sim       =   z_sim(3,1:Nblock:end)';
 PSI_sim     =   z_sim(5,1:Nblock:end)';
@@ -95,7 +96,23 @@ ye(2,:) = C(2,2)+b*sin(th) ;
 xe(3,:) = C(3,1)+a*cos(th) ; 
 ye(3,:) = C(3,2)+b*sin(th) ;
 xe_ego(1,:) = Cego(1,1)+a*cos(th) ; 
-ye_ego(1,:) = Cego(1,2)+b*sin(th) ; 
+ye_ego(1,:) = Cego(1,2)+b*sin(th) ;
+xe_ego= xe_ego';
+ye_ego= ye_ego';
+ERot= zeros(2,length(th),length(PSI_sim)); %3D matrix that store a number length(PSI_sim) of sets of two vectors of coordinates for ellipses discretized into length(th) points
+for t=1:length(PSI_sim) %Time
+    for i=1:length(th)      %Solution steps
+    ERot(:,i,t)=[cos(PSI_sim(t,1)) -sin(PSI_sim(t,1)); sin(PSI_sim(t,1)) cos(PSI_sim(t,1))] * [xe_ego(i,1)-X_sim(t,1) ye_ego(i,1)-Y_sim(t,1)]' + [X_sim(t,1) Y_sim(t,1)]';
+    end
+end
+
+assignin('base','ERot',ERot);
+% xe_ego_rot(1,:) = ERot(1,:); 
+% ye_ego_rot(1,:) = ERot(2,:);
+% assignin('base','xe_ego_rot',xe_ego_rot);
+% assignin('base','ye_ego_rot',ye_ego_rot);
+%plot(xe_ego_rot(1,:), ye_ego_rot(1,:))
+
 % plot(xe(1,:),ye(1,:),xe(2,:),ye(2,:),xe(3,:),ye(3,:), xe_ego, ye_ego);
 % axis equal
 

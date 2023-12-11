@@ -18,14 +18,14 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     y_limit_max = 10;
     limit_draw_height = 2;
     %Safety ellipse parameters
-     a = 6 ;      % major axis 
-     e = 0.95 ;    % eccentricity 
-     b = 1.5 ; % minor axis 
-     th = linspace(0,2*pi) ; 
-     xe_ego=zeros(1,100);
-     ye_ego=zeros(1,100);
-     xe=zeros(length(x),100);
-     ye=zeros(length(y),100);
+    a = 6 ;      % major axis 
+    e = 0.95 ;    % eccentricity 
+    b = 1.5 ; % minor axis 
+    th = linspace(0,2*pi) ; 
+    xe_ego=zeros(1,100);
+    ye_ego=zeros(1,100);
+    xe=zeros(length(x),100);
+    ye=zeros(length(y),100);
 
     % Set up video file parameters
     outputVideo = VideoWriter('testAnimation.mp4');

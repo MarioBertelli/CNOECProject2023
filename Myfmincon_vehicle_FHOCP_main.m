@@ -75,6 +75,7 @@ myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0_main, Ts_simulation);
 
 % Run solver
+k=0;
 fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref);
 [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
 
@@ -96,3 +97,10 @@ subplot(2,3,6);plot(proximity);title('proximity');
 envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)');
 
 %%debugVisualization(Np, delta_diff, Td_diff, heading_err, lateral_err, speed_err, proximity);
+
+figure;
+hold on;
+for w=1:10
+    plot(ERot(1,:,w),ERot(2,:,w))
+end;
+hold off;
