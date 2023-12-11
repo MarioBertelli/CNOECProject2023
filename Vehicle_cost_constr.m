@@ -13,9 +13,9 @@ assignin('base','t_in',t_in);
 assignin('base','u_in',u_in);
 
 %% Run simulation with FFD
-time_FFD    =   [0:0.01:(Np-1)*Ts];
+time_FFD    =   [0:0.01:(Np)*Ts];
 Nblock      =   Ts/0.01;
-Nsim_FFD    =   length(time_FFD);
+Nsim_FFD    =   length(time_FFD) - 1;
 
 z_sim      =   zeros(6+9,Nsim_FFD);
 z_sim(:,1) =   z0;
@@ -53,7 +53,8 @@ distance_nearest_vehicle_1 = distance_nearest_vehicle_1 + 0.05;
 distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
 distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
 
-delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
+delta_diff  =   (x(Np+2:end,1)-x(Np+1:end-1,1));
+Td_diff = (x(2:Np,1)-x(1:Np-1,1));
 
 car_width = 1.5;
 %% Compute path constraints h(x)
@@ -120,8 +121,6 @@ end
 
 %% Compute cost function f(x)
 % y_ref [y0_ref, y1_ref, y2_ref]
-delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
-Td_diff     =   (x(2:Np-1,1)-x(1:Np-2,1));
 
 heading_error = PSI_sim;
 lateral_error = y_ref(2) - XY_sim(:,2);
