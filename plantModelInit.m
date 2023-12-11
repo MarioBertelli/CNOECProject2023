@@ -21,7 +21,7 @@ th      =       [m;Jz;a;b;Cf;Cr;rw;mu;Tdmax;Tdmin;dmax;dmin;Af;Al;Cx;Rr;rho];
 %% Simulation: Initial state
 X       =       20;         % inertial X position (m)
 Y       =       3;          % inertial Y position (m)
-Ux      =       10;         % body x velocity (m/s)
+Ux      =       8;         % body x velocity (m/s)
 beta    =       0;          % sideslip angle (rad)
 psi     =       0;          % yaw angle (rad)
 r       =       0;          % yaw rate (rad/s)

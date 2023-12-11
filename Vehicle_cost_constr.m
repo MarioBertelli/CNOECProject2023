@@ -1,4 +1,4 @@
-function v = Vehicle_cost_constr(x,Ts,Np,th,z0, speeds_neighboring, y_ref,V_ref)
+function v = Vehicle_cost_constr(x,Ts,Np,th,z0, speeds_neighboring, y_ref,V_ref, C_proximity, C_dist, car_width)
 % Function that computes the trajectory of the vehicle model
 % introduced in Lab. session A and returns the cost function
 % and the non linear equality and inequality constraints
@@ -17,74 +17,70 @@ time_FFD    =   [0:0.01:(Np-1)*Ts];
 Nblock      =   Ts/0.01;
 Nsim_FFD    =   length(time_FFD);
 
+%State initialization
 z_sim      =   zeros(6+9,Nsim_FFD);
 z_sim(:,1) =   z0;
 
 for ind=2:Nsim_FFD
-    u                   =   u_in(:,1+floor(time_FFD(ind)/Ts));
-    z_main = z_sim(1:6,ind-1);
-    z_neighbouring = z_sim(7:end, ind-1);
-    zdot               =   augmented_vehicle_model(0,z_main,u,0,th, ...
-                            z_neighbouring, speeds_neighboring);
-    z_sim(:,ind)       =   z_sim(:,ind-1)+Ts/Nblock*zdot;
+    u               =   u_in(:,1+floor(time_FFD(ind)/Ts));
+    z_main          =   z_sim(1:6,ind-1);
+    z_neighbouring  =   z_sim(7:end, ind-1);
+    zdot            =   augmented_vehicle_model(0,z_main,u,0,th,z_neighbouring,speeds_neighboring);
+    z_sim(:,ind)    =   z_sim(:,ind-1)+Ts/Nblock*zdot;
 end
 
+%% Extract info from simulation result
+%Coordinates of ego vehicle
 XY_sim_complete    =   z_sim(1:2,:)';
+%Coordinates of other vehicles
 XY_sim_near1_complete = z_sim(7:8,:)';
 XY_sim_near2_complete = z_sim(10:11,:)';
 XY_sim_near3_complete = z_sim(13:14,:)';
-
-XY_sim       =   z_sim(1:2,1:Nblock:end)';
-V_sim       =   z_sim(3,1:Nblock:end)';
-PSI_sim     =   z_sim(5,1:Nblock:end)';
-
+%Increasing sample period
+XY_sim       = z_sim(1:2,1:Nblock:end)';
+V_sim        = z_sim(3,1:Nblock:end)';
+PSI_sim      = z_sim(5,1:Nblock:end)';
 XY_near1_sim = z_sim(7:8,1:Nblock:end)';
 XY_near2_sim = z_sim(10:11,1:Nblock:end)';
 XY_near3_sim = z_sim(13:14,1:Nblock:end)';
 
+%% Mahalanobis distance to differenciate lateral and longitudinal distances
 % compute mahalanobis distance from near vehicles 
-C = [3  0;
-     0  1;]; % TODO TUNATA A CASO, car aspect ratio?
-distance_nearest_vehicle_1 = sqrt(sum((XY_sim_near1_complete - XY_sim_complete)*inv(C).*(XY_sim_near1_complete - XY_sim_complete),2));
-distance_nearest_vehicle_2 = sqrt(sum((XY_sim_near2_complete - XY_sim_complete)*inv(C).*(XY_sim_near2_complete - XY_sim_complete),2));
-distance_nearest_vehicle_3 = sqrt(sum((XY_sim_near3_complete - XY_sim_complete)*inv(C).*(XY_sim_near3_complete - XY_sim_complete),2));
+distance_nearest_vehicle_1 = sqrt(sum((XY_sim_near1_complete - XY_sim_complete)*inv(C_proximity).*(XY_sim_near1_complete - XY_sim_complete),2));
+distance_nearest_vehicle_2 = sqrt(sum((XY_sim_near2_complete - XY_sim_complete)*inv(C_proximity).*(XY_sim_near2_complete - XY_sim_complete),2));
+distance_nearest_vehicle_3 = sqrt(sum((XY_sim_near3_complete - XY_sim_complete)*inv(C_proximity).*(XY_sim_near3_complete - XY_sim_complete),2));
 % avoid division by 0:
 distance_nearest_vehicle_1 = distance_nearest_vehicle_1 + 0.05;
 distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
 distance_nearest_vehicle_2 = distance_nearest_vehicle_2 + 0.05;
-
+%Steering angle derivative
 delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
 
-car_width = 1.5;
 %% Compute path constraints h(x)
-h           =   [-V_sim + 130/3.6;
-                 XY_sim(:,2) + 2 - car_width*1.3;
-                 -XY_sim(:,2) + 10 - car_width * 1.3;
-                 delta_diff + 0.1;
-                 -delta_diff + 0.1];
+h   =   [
+        -V_sim + 130/3.6;
+        XY_sim(:,2) + 2 - car_width*1.3;
+        -XY_sim(:,2) + 10 - car_width * 1.3;
+        delta_diff + 0.1;
+        -delta_diff + 0.1
+        ];
 
-% Ellipse minimum distance constraints:
-
-% Define covariance matrix for the ellipse
-C = [1.5 0; 0 3]; % Adjust based on your scenario
-
+%% Additive Ellipse minimum distance constraints:
 % Define the threshold (minimum distance from ego vehicle to ellipses)
 threshold = 1; % Adjust this value based on your specific requirements
 
-% Calculate distances between the ego vehicle and the three nearest vehicles
+% Calculate distances between the ego vehicle and the three nearest
+% vehicles by distance between ego center and other vehicles ellipse
 distances_to_nearest_vehicles = [
-    sqrt(sum(((XY_sim - XY_near1_sim) * inv(C)) .* (XY_sim - XY_near1_sim), 2));
-    sqrt(sum(((XY_sim - XY_near2_sim) * inv(C)) .* (XY_sim - XY_near2_sim), 2));
-    sqrt(sum(((XY_sim - XY_near3_sim) * inv(C)) .* (XY_sim - XY_near3_sim), 2))
+    sqrt(sum(((XY_sim - XY_near1_sim) * inv(C_dist)) .* (XY_sim - XY_near1_sim), 2));
+    sqrt(sum(((XY_sim - XY_near2_sim) * inv(C_dist)) .* (XY_sim - XY_near2_sim), 2));
+    sqrt(sum(((XY_sim - XY_near3_sim) * inv(C_dist)) .* (XY_sim - XY_near3_sim), 2))
 ];
 
 % Add constraints based on distances to ellipses of nearest vehicles
 h_ellipse_nearest_vehicles = distances_to_nearest_vehicles - threshold;
 h = [h;
      h_ellipse_nearest_vehicles];
-if min(h) < 0
-    a = 1;
-end
 
 % fig = figure;
 % % Plot ego vehicle position
@@ -120,17 +116,30 @@ end
 
 %% Compute cost function f(x)
 % y_ref [y0_ref, y1_ref, y2_ref]
-delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
+%Input torque derivative
 Td_diff     =   (x(2:Np-1,1)-x(1:Np-2,1));
-
+%Heading angle error with respect to horizontal
 heading_error = PSI_sim;
+%Lateral error with respect to the lane reference
 lateral_error = y_ref(2) - XY_sim(:,2);
+%Speed error with respect to speed reference
 speed_error = V_ref - V_sim;
+%Proximity based on mahalanobis distance previously computed
 proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ...
             +(1./distance_nearest_vehicle_2)'*(1./distance_nearest_vehicle_2) ...
             +(1./distance_nearest_vehicle_3)'*(1./distance_nearest_vehicle_3);
+%Cost function
+f       =   1e3*(delta_diff'*delta_diff)+ ...
+            1e-5*(Td_diff'*Td_diff) + ...
+            1e2*(heading_error'*heading_error) + ...
+            6e-1*(lateral_error'*lateral_error) + ...
+            5e-2*(speed_error'*speed_error) + ...
+            10* proximity;
 
-%Assign to workspace some useful 'global' quantities
+%% Stack cost and constraints
+v           =   [f;h];
+
+%% Assign to workspace some useful 'global' quantities
 assignin('base','delta_diff',delta_diff);
 assignin('base','Td_diff',Td_diff);
 assignin('base','heading_error',heading_error);
@@ -140,17 +149,4 @@ assignin('base','proximity',proximity);
 assignin('base','distance_nearest_vehicle_1',distance_nearest_vehicle_1);
 assignin('base','distance_nearest_vehicle_2',distance_nearest_vehicle_2);
 assignin('base','distance_nearest_vehicle_3',distance_nearest_vehicle_3);
-
-
-f           =   1e3*(delta_diff'*delta_diff)+ ...
-                1e-5*(Td_diff'*Td_diff) + ...
-                1e2*(heading_error'*heading_error) + ...
-                6e-1*(lateral_error'*lateral_error) + ...
-                5e-2*(speed_error'*speed_error) + ...
-                10* proximity;
-
-
-%% Stack cost and constraints
-v           =   [f;h];
-
 

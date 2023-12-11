@@ -1,4 +1,4 @@
-function envVisualization(x, y, x_ego, y_ego, theta_ego)
+function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, car_width, car_length, y_lanes)
     % ENVVISUALIZATION - Create an animated visualization of an environment with vehicles.
     % Input:
     %   x: Matrix of x-coordinates of other vehicles at different time steps (MxN), where M is the number of time steps, and N is the number of vehicles.
@@ -6,27 +6,37 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     %   x_ego: Vector of x-coordinates of the ego vehicle at different time steps (Mx1).
     %   y_ego: Vector of y-coordinates of the ego vehicle at different time steps (Mx1).
     %   theta_ego: Vector of ego vehicle orientations in radians at different time steps (Mx1).
-
-    % Vehicle dimensions
-    car_width = 1.5;
-    car_length = 3;
+    %   C_proximity: Covariance matrix to differentiate lateral and longitudinal proximity to other vehicles (Cost function entry) (2x2)
+    %   C_dist: Covariance matrix to differentiate lateral and longitudinal distance to other vehicles (Constraint purpose) (2x2)
+    %   car_width: Car width in meters [1x1]
+    %   car_length: Car length in meters [1x1]
+    %   y_lanes: column vectro of the possible lane references [3x1]
+   
+    %% Visualized Environment Settings
+    % A bit of magic
     x_view_before_after = 25;
-    % track structure info
-    centerlines = [2, 5, 8];
+    % Track structure info
+    centerlines = y_lanes;
     track_width = 3;
     y_limit_min = - 2;
     y_limit_max = 10;
     limit_draw_height = 2;
-    %Safety ellipse parameters
-    a = 6 ;      % major axis 
-    e = 0.95 ;    % eccentricity 
-    b = 1.5 ; % minor axis 
-    th = linspace(0,2*pi) ; 
+
+    %% Safety ellipse parameters
+    % major axis
+    a = C_dist(2,2);       
+    % minor axis 
+    b = C_dist(1,1);
+    % Angles of definition of the ellipse
+    th = linspace(0,2*pi); 
+    % Ego vehicle ellipse points coordinates init
     xe_ego=zeros(1,100);
     ye_ego=zeros(1,100);
+    % Other vehicles ellipse points coordinates init
     xe=zeros(length(x),100);
     ye=zeros(length(y),100);
 
+    %% Video Setup
     % Set up video file parameters
     outputVideo = VideoWriter('testAnimation.mp4');
     outputVideo.FrameRate = 10; % Adjust the frame rate as needed
@@ -50,8 +60,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
     ylim([y_min, y_max]);
     axis equal;
 
-    % Add other customizations to the visualization environment here
-
+    %% Animation
     % Begin creating the animation
     sample_skip = 100;
     for t = 1:sample_skip:size(x, 1)
@@ -71,13 +80,14 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
         % Set the axis limits to maintain fixed dimensions
         axis equal;
         
-        %ax1=subplot(5,4,[13 14 15 16 17 18 19 20]);
         title('Environment Visualization'),xlabel('xSim [m]'),ylabel('ySim [m]');
+        % Uncomment this for full street view
         xlim([x_min, x_max]);
+        % Uncomment this for vehicle eye bird view
         %xlim([x_ego(t) - x_view_before_after, x_ego(t) + x_view_before_after]);
         ylim([y_min, y_max]);
 
-        % Draw lanes or other environmental elements if necessary
+        % Draw lanes or other environmental elements
         for i = 1:length(centerlines)
             line([x_min, x_max], [centerlines(i) - track_width/2, centerlines(i)- track_width/2], 'LineStyle', '--', 'Color', 'k', 'LineWidth', 1.0);
             line([x_min, x_max], [centerlines(i) + track_width/2, centerlines(i)+ track_width/2], 'LineStyle', '--', 'Color', 'k', 'LineWidth', 1.0);
@@ -111,7 +121,8 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         %Safety distance ellipse around ego vehicle
         xe_ego(1,:) = x_ego(t)+a*cos(th); 
-        ye_ego(1,:) = y_ego(t)+b*sin(th); 
+        ye_ego(1,:) = y_ego(t)+b*sin(th);
+        % Ego vehicle ellipse rototraslation with body
         ERot= zeros(2,100);
         for i=1:100
             ERot(:,i)=[cos(theta_ego(t)) -sin(theta_ego(t)); sin(theta_ego(t)) cos(theta_ego(t))] * [xe_ego(1,i)-x_ego(t) ye_ego(1,i)-y_ego(t)]' + [x_ego(t) y_ego(t)]';
@@ -124,7 +135,6 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
         text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
         %Plot ellipse around ego vehigle, properly rotated
         
-        %plot(xe_ego, ye_ego, 'b');
         plot(ERot(1,:), ERot(2,:),'b');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
@@ -134,37 +144,6 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego)
 
         hold off;
 
-        %Subplots
-
-%         %Subplot 1
-%         subplot(5,4,1);
-%         plot(t,debugInfo(1,:),'k');
-%         title('delta_diff');
-% 
-%         %Subplot 2
-%         subplot(5,4,2);
-%         plot(t,debugInfo(2,:));
-%         title('Td_diff');
-% 
-%         %Subplot 3
-%         subplot(5,4,3);
-%         plot(t,debugInfo(3,:));
-%         title('heading_error');
-% 
-%         %Subplot 4
-%         subplot(5,4,4);
-%         plot(t,debugInfo(4,:));
-%         title('lateral_error');
-% 
-%         %Subplot 5
-%         subplot(5,4,5);
-%         plot(t,debugInfo(5,:));
-%         title('speed_error');
-% 
-%         %Subplot 6
-%         subplot(5,4,6);
-%         plot(t,debugInfo(6,:));
-%         title('proximity');
         % Add any indicators or annotations for constraints or bounds
 
         % Update the visualization
