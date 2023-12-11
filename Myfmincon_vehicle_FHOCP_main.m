@@ -58,7 +58,7 @@ d       =       [-Tdmax*ones(Np,1);
                  dmin*ones(Np,1)];
 
 % Number of nonlinear inequality constraints (track borders)
-q       =       5*Np;
+q       =       8*Np;
 
 %% Solution -  BFGS
 % Initialize solver options
@@ -84,6 +84,9 @@ fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring, y_lanes,V_ref);
 %% Visualize results
 [z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
 
+envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)');
+
+
 debugFig=figure;
 set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
 subplot(2,3,1);plot(delta_diff);title('delta diff');
@@ -91,10 +94,9 @@ subplot(2,3,2);plot(Td_diff);title('Td diff');
 subplot(2,3,3);plot(heading_error);title('heading error');
 subplot(2,3,4);plot(lateral_error);title('lateral error');
 subplot(2,3,5);plot(speed_error);title('speed error');
-subplot(2,3,6);plot(proximity);title('proximity');
+subplot(2,3,6);plot(distance_nearest_vehicle_1);title('distance_nearest_vehicle_1');
 
 
-envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)');
 
 %%debugVisualization(Np, delta_diff, Td_diff, heading_err, lateral_err, speed_err, proximity);
 

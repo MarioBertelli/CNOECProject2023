@@ -34,10 +34,13 @@ XY_sim_near1_complete = z_sim(7:8,:)';
 XY_sim_near2_complete = z_sim(10:11,:)';
 XY_sim_near3_complete = z_sim(13:14,:)';
 
-X_sim       =   z_sim(1,1:Nblock:end)';
-Y_sim       =   z_sim(2,1:Nblock:end)';
+XY_sim       =   z_sim(1:2,1:Nblock:end)';
 V_sim       =   z_sim(3,1:Nblock:end)';
 PSI_sim     =   z_sim(5,1:Nblock:end)';
+
+XY_near1_sim = z_sim(7:8,1:Nblock:end)';
+XY_near2_sim = z_sim(10:11,1:Nblock:end)';
+XY_near3_sim = z_sim(13:14,1:Nblock:end)';
 
 % compute mahalanobis distance from near vehicles 
 C = [3  0;
@@ -55,66 +58,77 @@ delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
 car_width = 1.5;
 %% Compute path constraints h(x)
 h           =   [-V_sim + 130/3.6;
-                 Y_sim + 2 - car_width*1.3;
-                 -Y_sim + 10 - car_width * 1.3
-                 delta_diff + 0.1
+                 XY_sim(:,2) + 2 - car_width*1.3;
+                 -XY_sim(:,2) + 10 - car_width * 1.3;
+                 delta_diff + 0.1;
                  -delta_diff + 0.1];
- 
+
+% Ellipse minimum distance constraints:
+
+% Define covariance matrix for the ellipse
+C = [1.5 0; 0 3]; % Adjust based on your scenario
+
+% Define the threshold (minimum distance from ego vehicle to ellipses)
+threshold = 1; % Adjust this value based on your specific requirements
+
+% Calculate distances between the ego vehicle and the three nearest vehicles
+distances_to_nearest_vehicles = [
+    sqrt(sum(((XY_sim - XY_near1_sim) * inv(C)) .* (XY_sim - XY_near1_sim), 2));
+    sqrt(sum(((XY_sim - XY_near2_sim) * inv(C)) .* (XY_sim - XY_near2_sim), 2));
+    sqrt(sum(((XY_sim - XY_near3_sim) * inv(C)) .* (XY_sim - XY_near3_sim), 2))
+];
+
+% Add constraints based on distances to ellipses of nearest vehicles
+h_ellipse_nearest_vehicles = distances_to_nearest_vehicles - threshold;
+h = [h;
+     h_ellipse_nearest_vehicles];
+if min(h) < 0
+    a = 1;
+end
+
+% fig = figure;
+% % Plot ego vehicle position
+% plot(XY_sim(:,1), XY_sim(:,2), 'bo', 'MarkerSize', 2, 'DisplayName', 'Ego Vehicle');
+% hold on;
+% % Plot positions of nearest vehicles
+% plot(XY_near1_sim(:,1), XY_near1_sim(:,2), 'ro', 'MarkerSize', 1, 'DisplayName', 'Nearest Vehicle 1', 'Color', "r");
+% plot(XY_near2_sim(:,1), XY_near2_sim(:,2), 'go', 'MarkerSize', 1, 'DisplayName', 'Nearest Vehicle 2', 'Color', "g");
+% plot(XY_near3_sim(:,1), XY_near3_sim(:,2), 'mo', 'MarkerSize', 1, 'DisplayName', 'Nearest Vehicle 3', 'Color', "b");
+% 
+% % Plot ellipses around the nearest vehicles
+% for i = 1:Np
+%     [V, D] = eig(C);
+%     a = sqrt(threshold / D(1,1));
+%     b = sqrt(threshold / D(2,2));
+%     t = linspace(0, 2 * pi);
+%     ellipse_x = a * cos(t);
+%     ellipse_y = b * sin(t);
+%     ellipse_points = V * [ellipse_x; ellipse_y];
+%     plot(ellipse_points(1,:) + XY_near1_sim(i,1), ellipse_points(2,:) + XY_near1_sim(i,2), 'LineWidth', 1.5, 'DisplayName', ['Ellipse ', num2str(i)], 'Color', "r");
+%     plot(ellipse_points(1,:) + XY_near2_sim(i,1), ellipse_points(2,:) + XY_near2_sim(i,2), 'LineWidth', 1.5, 'DisplayName', ['Ellipse ', num2str(i)], 'Color', "g");
+%     plot(ellipse_points(1,:) + XY_near3_sim(i,1), ellipse_points(2,:) + XY_near3_sim(i,2), 'LineWidth', 1.5, 'DisplayName', ['Ellipse ', num2str(i)], 'Color', "b");
+% 
+% end
+% 
+% % legend;
+% xlabel('X Position');
+% ylabel('Y Position');
+% title('Visualization of Ellipses around Nearest Vehicles');
+% grid on;
+% axis equal;
+% hold off;
+
 %% Compute cost function f(x)
 % y_ref [y0_ref, y1_ref, y2_ref]
 delta_diff  =   (x(Np+1:end,1)-x(Np:end-1,1));
 Td_diff     =   (x(2:Np-1,1)-x(1:Np-2,1));
 
 heading_error = PSI_sim;
-lateral_error = y_ref(2) - Y_sim;
+lateral_error = y_ref(2) - XY_sim(:,2);
 speed_error = V_ref - V_sim;
 proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ...
             +(1./distance_nearest_vehicle_2)'*(1./distance_nearest_vehicle_2) ...
             +(1./distance_nearest_vehicle_3)'*(1./distance_nearest_vehicle_3);
-% -2*e-2*final_X + ...
-
-%Ellipse safety boundary around cars
-C1=[z_neighbouring(1) z_neighbouring(2)];
-C2=[z_neighbouring(4) z_neighbouring(5)];
-C3=[z_neighbouring(7) z_neighbouring(8)];
-Cego=[z_main(1) z_main(2)];
-[C] = [C1; C2; C3];  % centers
-a = 2 ;      % major axis 
-e = 0.8 ;    % eccentricity 
-b = a*sqrt(1-e^2) ; % minor axis 
-%
-th = linspace(0,2*pi) ; 
-% Ellipse 
-xe=zeros(3,100);
-ye=zeros(3,100);
-xe_ego=zeros(1,100);
-ye_ego=zeros(1,100);
-xe(1,:) = C(1,1)+a*cos(th) ; 
-ye(1,:) = C(1,2)+b*sin(th) ; 
-xe(2,:) = C(2,1)+a*cos(th) ; 
-ye(2,:) = C(2,2)+b*sin(th) ; 
-xe(3,:) = C(3,1)+a*cos(th) ; 
-ye(3,:) = C(3,2)+b*sin(th) ;
-xe_ego(1,:) = Cego(1,1)+a*cos(th) ; 
-ye_ego(1,:) = Cego(1,2)+b*sin(th) ;
-xe_ego= xe_ego';
-ye_ego= ye_ego';
-ERot= zeros(2,length(th),length(PSI_sim)); %3D matrix that store a number length(PSI_sim) of sets of two vectors of coordinates for ellipses discretized into length(th) points
-for t=1:length(PSI_sim) %Time
-    for i=1:length(th)      %Solution steps
-    ERot(:,i,t)=[cos(PSI_sim(t,1)) -sin(PSI_sim(t,1)); sin(PSI_sim(t,1)) cos(PSI_sim(t,1))] * [xe_ego(i,1)-X_sim(t,1) ye_ego(i,1)-Y_sim(t,1)]' + [X_sim(t,1) Y_sim(t,1)]';
-    end
-end
-
-assignin('base','ERot',ERot);
-% xe_ego_rot(1,:) = ERot(1,:); 
-% ye_ego_rot(1,:) = ERot(2,:);
-% assignin('base','xe_ego_rot',xe_ego_rot);
-% assignin('base','ye_ego_rot',ye_ego_rot);
-%plot(xe_ego_rot(1,:), ye_ego_rot(1,:))
-
-% plot(xe(1,:),ye(1,:),xe(2,:),ye(2,:),xe(3,:),ye(3,:), xe_ego, ye_ego);
-% axis equal
 
 %Assign to workspace some useful 'global' quantities
 assignin('base','delta_diff',delta_diff);
@@ -123,6 +137,9 @@ assignin('base','heading_error',heading_error);
 assignin('base','lateral_error',lateral_error);
 assignin('base','speed_error',speed_error);
 assignin('base','proximity',proximity);
+assignin('base','distance_nearest_vehicle_1',distance_nearest_vehicle_1);
+assignin('base','distance_nearest_vehicle_2',distance_nearest_vehicle_2);
+assignin('base','distance_nearest_vehicle_3',distance_nearest_vehicle_3);
 
 
 f           =   1e3*(delta_diff'*delta_diff)+ ...
