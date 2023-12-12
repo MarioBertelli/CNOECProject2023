@@ -15,14 +15,13 @@ run('plantModelInit.m');
 
 %% Simulation Planner
 % Call function that gives x and y coordinate matrices of the N vehicles based on previous settings
-[x, y] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
+[x_car_simulated, y_car_simulated] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
 
-%% Single vehicle Bicycle Model extension with three Nearest Vehicles
 % Calculate distances between ego vehicle and all other vehicles
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
-distances = sqrt((x_ego(t) - x(t, :)).^2 + (y_ego(t) - y(t, :)).^2);
+distances = sqrt((x_ego(t) - x_car_simulated(t, :)).^2 + (y_ego(t) - y_car_simulated(t, :)).^2);
 
 % Sort vehicles by distance
 [~, sorted_indices] = sort(distances);
@@ -33,9 +32,9 @@ nearest_indices = sorted_indices(1:3);
 %Three states for each vehicle x,y,theta
 z_neighboring = zeros(3*3,1);
 % Fill the initial x
-z_neighboring(1:3:end) = x(t, nearest_indices); 
+z_neighboring(1:3:end) = x_car_simulated(t, nearest_indices); 
 % Fill the initial y
-z_neighboring(2:3:end) = y(t, nearest_indices);
+z_neighboring(2:3:end) = y_car_simulated(t, nearest_indices);
 % Near vehicles speed
 speeds_neighboring = zeros(size(z_neighboring));
 speeds_neighboring(1:3:end) = vx(nearest_indices);
@@ -96,7 +95,7 @@ fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_pro
 [z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
 
 % Custom App Call for environment visualization, animation and video saving
-envVisualization(x,y, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
+envVisualization(x_car_simulated,y_car_simulated, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 
 %% Debug plots
 debugFig=figure;
