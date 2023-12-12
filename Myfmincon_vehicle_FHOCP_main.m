@@ -21,7 +21,7 @@ run('plantModelInit.m');
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
-[z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars);
+[z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
 
 %% FHOCP parameters - single shooting
 Ts_optimization      =       0.5;                % seconds, input sampling period
@@ -68,6 +68,38 @@ myoptions.nitermax      =	1e2;
 myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts_optimization,Np,th, z0_main, Ts_simulation);
 
+%% MPC Formulation
+nz=length(z0);
+nu=2; 
+N_mpc_sim = entire_simulation_duration / Ts_optimization;
+Zsim_MPC            =   zeros((N_mpc_sim+1)*nz,1); 
+Usim_MPC            =   zeros(N_mpc_sim*nu,1); 
+Zsim_MPC(1:nz,1)    =   z0;  
+zt                  =   z0; 
+
+
+for ind=1:N_mpc_sim
+    % compute nearest vehicles at current iteration
+    [z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, zt(1), zt(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
+    zt(7:end) = z_neighboring;
+    % Run solver
+    fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
+    [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
+    u_actual = xstar(1:length(xstar)/nu:end,1);
+    Usim_MPC((ind-1)*nu+1:(ind)*nu,1) =   u_actual;
+    u_actual = xstar(1:length(xstar)/2:end,1); 
+
+    % Simulate-Integrate the model to get the next initial state, simulate
+    % it considering 1 control input applied for a time equal to the period
+    % of one mpc step
+    [z_sim] = Vehicle_traj(xstar,Ts_optimization,1,th,zt, Ts_simulation);
+    zt = z_sim(:,end);
+
+    Zsim_MPC((ind)*nz+1:(ind+1)*nz,1) = zt; 
+    x0=[xstar(2:end/2); xstar(end/2); xstar(end/2+2:end); xstar(end)];
+
+
+end
 % Cost and Constraints Definition Function
 fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
 
