@@ -1,4 +1,4 @@
-function [x, y, vx] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, M, Ts)
+function [x, y, vx] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, duration, Ts)
 % SIMPLANNER - Generate positions, speeds and yawRates of the N vehicles 
 % present into the simulation to be visualized and used by the control block.
 % Limitations: It allows only the definition of a starting lane for every
@@ -18,6 +18,9 @@ function [x, y, vx] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, M, Ts)
     % Output:
     %   x: Matrix of x-coordinates of other vehicles at different time steps (MxN), where M is the number of time steps, and N is the number of vehicles.
     %   y: Matrix of y-coordinates of other vehicles at different time steps (MxN), corresponding to the x-coordinates.
+
+
+M = duration / Ts;
 
 %Initialization of x-coordinates of the N vehicles
 for i=1:N

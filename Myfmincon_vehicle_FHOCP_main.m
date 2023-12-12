@@ -15,34 +15,18 @@ run('plantModelInit.m');
 
 %% Simulation Planner
 % Call function that gives x and y coordinate matrices of the N vehicles based on previous settings
-[x_car_simulated, y_car_simulated] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, num_time_steps, Ts_simulation);
+[x_simulated_cars, y_simulated_cars] = simPlanner(x0, lane0, vx_simulated_cars, tSwitch, laneSwitch, N_simulated_cars, entire_simulation_duration, Ts_simulation);
 
 % Calculate distances between ego vehicle and all other vehicles
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
-distances = sqrt((x_ego(t) - x_car_simulated(t, :)).^2 + (y_ego(t) - y_car_simulated(t, :)).^2);
-
-% Sort vehicles by distance
-[~, sorted_indices] = sort(distances);
-
-% Select the three nearest vehicles
-nearest_indices = sorted_indices(1:3);
-
-%Three states for each vehicle x,y,theta
-z_neighboring = zeros(3*3,1);
-% Fill the initial x
-z_neighboring(1:3:end) = x_car_simulated(t, nearest_indices); 
-% Fill the initial y
-z_neighboring(2:3:end) = y_car_simulated(t, nearest_indices);
-% Near vehicles speed
-speeds_neighboring = zeros(size(z_neighboring));
-speeds_neighboring(1:3:end) = vx(nearest_indices);
+[z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars);
 
 %% FHOCP parameters - single shooting
-Ts      =       0.5;                % seconds, input sampling period
-Tend    =       simulation_duration;% seconds, terminal time
-Np      =       Tend/Ts;            % prediction horizon
+Ts_optimization      =       0.5;                % seconds, input sampling period
+Tend    =       optimization_horizon_duration;% seconds, terminal time
+Np      =       Tend/Ts_optimization;            % prediction horizon
 
 %% Initialize optimization variables
 % Optimization variables: [U_Cm, U_delta]
@@ -82,20 +66,20 @@ myoptions.ls_c          =	.1;
 myoptions.ls_nitermax   =	1e2;
 myoptions.nitermax      =	1e2;
 myoptions.xsequence     =	'on';
-myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts,Np,th, z0_main, Ts_simulation);
+myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts_optimization,Np,th, z0_main, Ts_simulation);
 
 % Cost and Constraints Definition Function
-fun=@(x)Vehicle_cost_constr(x,Ts,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
+fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
 
 % Run solver
 [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
 
 %% Visualize results
 % Final Vehicle Trajectory Visualization
-[z_sim] = Vehicle_traj(xstar,Ts,Np,th,z0, Ts_simulation);
+[z_sim] = Vehicle_traj(xstar,Ts_optimization,Np,th,z0, Ts_simulation);
 
 % Custom App Call for environment visualization, animation and video saving
-envVisualization(x_car_simulated,y_car_simulated, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
+envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 
 %% Debug plots
 debugFig=figure;

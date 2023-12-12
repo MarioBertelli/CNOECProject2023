@@ -27,28 +27,28 @@ psi     =       0;          % yaw angle (rad)
 r       =       0;          % yaw rate (rad/s)
 z0_main     =       [X;Y;Ux;beta;psi;r];
 
-%% Simulation: step amplitude
-Td_step             =       Tdmax/2.5;
-delta_step          =       dmax/15;
-%% Simulation with ode45
-% Time integration parameters
-Ts_o45      =       Ts_simulation;              % sampling time (s)
-Tend_o45    =       simulation_duration;        % final time (s)
-tvec_o45    =       0:Ts_o45:Tend_o45;          % time vector (s)
-% Initialize simulation output
-N_o45               =       length(tvec_o45);   % number of samples
-zout_o45            =       zeros(6,N_o45);     % matrix with states
-uout_o45            =       zeros(2,N_o45);     % matrix with inputs
-Fout_o45            =       zeros(6,N_o45);     % matrix with forces
-zout_o45(:,1)       =       z0_main;
-%uout_o45(:,1)       =       [Td_step;delta_step];
-%Provvisory input maneuever TO BE ASSIGNED ACCORDING TO CONTROL STRATEGY
-for i=1:floor(N_o45/8)
-    uout_o45(2,i)=delta_step;
-end
-for i=floor(N_o45/8):floor(2/8*N_o45)
-    uout_o45(2,i)=-delta_step;
-end
-for i=floor(2/8*N_o45):floor(N_o45)
-    uout_o45(2,i)=0;
-end
+% %% Simulation: step amplitude
+% Td_step             =       Tdmax/2.5;
+% delta_step          =       dmax/15;
+% %% Simulation with ode45
+% % Time integration parameters
+% Ts_o45      =       Ts_simulation;              % sampling time (s)
+% Tend_o45    =       entire_simulation_duration;        % final time (s)
+% tvec_o45    =       0:Ts_o45:Tend_o45;          % time vector (s)
+% % Initialize simulation output
+% N_o45               =       length(tvec_o45);   % number of samples
+% zout_o45            =       zeros(6,N_o45);     % matrix with states
+% uout_o45            =       zeros(2,N_o45);     % matrix with inputs
+% Fout_o45            =       zeros(6,N_o45);     % matrix with forces
+% zout_o45(:,1)       =       z0_main;
+% %uout_o45(:,1)       =       [Td_step;delta_step];
+% %Provvisory input maneuever TO BE ASSIGNED ACCORDING TO CONTROL STRATEGY
+% for i=1:floor(N_o45/8)
+%     uout_o45(2,i)=delta_step;
+% end
+% for i=floor(N_o45/8):floor(2/8*N_o45)
+%     uout_o45(2,i)=-delta_step;
+% end
+% for i=floor(2/8*N_o45):floor(N_o45)
+%     uout_o45(2,i)=0;
+% end
