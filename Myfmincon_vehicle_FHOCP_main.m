@@ -24,9 +24,9 @@ y_ego = [z0_main(2)];
 [z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
 
 %% FHOCP parameters - single shooting
-Ts_optimization      =       0.5;                % seconds, input sampling period
-Tend    =       optimization_horizon_duration;% seconds, terminal time
-Np      =       Tend/Ts_optimization;            % prediction horizon
+Ts_optimization      =       0.5;                             % seconds, input sampling period
+Tend                 =       optimization_horizon_duration;   % seconds, terminal time
+Np                   =       Tend/Ts_optimization;            % prediction horizon
 
 %% Initialize optimization variables
 % Optimization variables: [U_Cm, U_delta]
@@ -69,47 +69,51 @@ myoptions.xsequence     =	'on';
 myoptions.outputfcn     =   @(x)Vehicle_traj(x,Ts_optimization,Np,th, z0_main, Ts_simulation);
 
 %% MPC Formulation
+% Number of states of the extended model (ego+other vehicles)
 nz=length(z0);
+% Number of inputs
 nu=2; 
+% Number of iteration of the MPC into the total simulation duration
 N_mpc_sim = entire_simulation_duration / Ts_optimization;
+% Init of a vector big enough to contain all the states for all the iterations
 Zsim_MPC            =   zeros((N_mpc_sim+1)*nz,1); 
+% Init of a vector big enough to contain all the inputs for all the iterations
 Usim_MPC            =   zeros(N_mpc_sim*nu,1); 
+% States of the initial iteration are the initial states
 Zsim_MPC(1:nz,1)    =   z0;  
+% Zt filled with initial state
 zt                  =   z0; 
 
-
+% Iteration of the optimization process N_mpc_sim times
 for ind=1:N_mpc_sim
-    % compute nearest vehicles at current iteration
+    % compute nearest vehicles states at current iteration, needed for constraints and costs definition
     [z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, zt(1), zt(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
+    % Adding to initial states of the ego vehicle the states of neighboring vehicles
     zt(7:end) = z_neighboring;
-    % Run solver
+    % Define costs and constraints
     fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
+    % Run solver
     [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
+    % Take from optimization variable vector only the value at first step of the horizon for each variable 
     u_actual = xstar(1:length(xstar)/nu:end,1);
+    % For every iteration put 1-step horizon control variables into increasing position of Usim_MPC
     Usim_MPC((ind-1)*nu+1:(ind)*nu,1) =   u_actual;
-    u_actual = xstar(1:length(xstar)/2:end,1); 
+    %u_actual = xstar(1:length(xstar)/2:end,1); % CREDO NON SEVA A NULLA <--------------
 
     % Simulate-Integrate the model to get the next initial state, simulate
     % it considering 1 control input applied for a time equal to the period
     % of one mpc step
     [z_sim] = Vehicle_traj(xstar,Ts_optimization,1,th,zt, Ts_simulation);
+    % Assign to zt last ego vehicle state to be transmitted to next cicle
     zt = z_sim(:,end);
-
+    % Update state at current MPC iteration
     Zsim_MPC((ind)*nz+1:(ind+1)*nz,1) = zt; 
+    % Initial guess for optimization variables of next iteration
     x0=[xstar(2:end/2); xstar(end/2); xstar(end/2+2:end); xstar(end)];
-
-
 end
-% Cost and Constraints Definition Function
-fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
 
-% Run solver
-[xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
 
 %% Visualize results
-% Final Vehicle Trajectory Visualization
-[z_sim] = Vehicle_traj(xstar,Ts_optimization,Np,th,z0, Ts_simulation);
-
 % Custom App Call for environment visualization, animation and video saving
 envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 

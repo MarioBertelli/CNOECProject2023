@@ -21,7 +21,7 @@ Nsim_FFD    =   length(time_FFD);
 z_sim      =   zeros(6,Nsim_FFD);
 z_sim(:,1) =   z0_main;
 for ind=2:Nsim_FFD
-    u                   =   u_in(:,1+floor(time_FFD(ind)/Ts));
+    u                  =   u_in(:,1+floor(time_FFD(ind)/Ts));
     zdot               =   vehicle(0,z_sim(:,ind-1),u,0,th);
     z_sim(:,ind)       =   z_sim(:,ind-1)+Ts/Nblock*zdot;
 end
