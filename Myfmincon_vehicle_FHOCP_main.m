@@ -69,7 +69,7 @@ d       =       [
                 ];
 
 % Number of nonlinear inequality constraints (track borders)
-q       =       8*Np;
+q       =       6*Np + 2*(Np-1);    % + 2*(Np-1) are the delta_diff constraints
 
 %% Solution -  BFGS
 % Initialize solver options
