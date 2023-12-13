@@ -1,6 +1,6 @@
 %% Simulation Settings
 Ts_simulation = 1e-3;
-entire_simulation_duration = 10;
+entire_simulation_duration = 6;
 optimization_horizon_duration = 3;
 
 num_time_steps = entire_simulation_duration / Ts_simulation;

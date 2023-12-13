@@ -104,7 +104,7 @@ for ind=1:N_mpc_sim
     % Simulate-Integrate the model to get the next initial state, simulate
     % it considering 1 control input applied for a time equal to the period
     % of one mpc step
-    [z_sim] = Vehicle_traj(xstar,Ts_optimization,6,th,zt(1:6), Ts_simulation);
+    [z_sim] = Vehicle_traj(u_actual,Ts_optimization,1,th,zt(1:6), Ts_simulation);
     % Assign to zt last ego vehicle state to be transmitted to next cicle
     zt(1:6) = z_sim(:,end);
     % Update state at current MPC iteration
@@ -114,9 +114,9 @@ for ind=1:N_mpc_sim
 
 end
 
-
 %% Visualize results
 % Custom App Call for environment visualization, animation and video saving
+[z_sim] = Vehicle_traj(u_actual,Ts_optimization,1,th,zt(1:6), Ts_simulation);
 envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 
 %% MPC States
