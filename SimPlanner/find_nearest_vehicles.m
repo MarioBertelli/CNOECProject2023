@@ -15,7 +15,7 @@ function [z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, x_ego, y
     %   speeds_neighboring: Speeds of the three nearest vehicles
     
     % Convert time 't' to the index in the simulated data using interpolation
-    t_index = round(t / Ts_simulation)*Ts_optimization + 1;
+    t_index = round(t / Ts_simulation)*Ts_optimization;
 
     % Calculate distances based on the corresponding time index
     distances = sqrt((x_ego - x_car_simulated(t_index, :)).^2 + (y_ego - y_car_simulated(t_index, :)).^2);

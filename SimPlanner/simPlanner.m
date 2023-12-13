@@ -20,7 +20,7 @@ function [x, y, vx] = simPlanner(x0, lane0, vx, tSwitch, laneSwitch, N, duration
     %   y: Matrix of y-coordinates of other vehicles at different time steps (MxN), corresponding to the x-coordinates.
 
 
-M = duration / Ts + 1;
+M = duration / Ts;
 
 %Initialization of x-coordinates of the N vehicles
 for i=1:N
