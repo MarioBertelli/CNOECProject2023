@@ -146,13 +146,10 @@ f       =   1e3*(delta_diff)+ ...
 v           =   [f;h];
 
 %% Assign to workspace some useful 'global' quantities
-assignin('base','delta_diff',delta_diff);
-assignin('base','Td_diff',Td_diff);
-assignin('base','heading_error',heading_error);
-assignin('base','lateral_error',lateral_error);
-assignin('base','speed_error',speed_error);
-assignin('base','proximity',proximity);
-assignin('base','distance_nearest_vehicle_1',distance_nearest_vehicle_1);
-assignin('base','distance_nearest_vehicle_2',distance_nearest_vehicle_2);
-assignin('base','distance_nearest_vehicle_3',distance_nearest_vehicle_3);
+assignin('base','delta_diff_temp',delta_diff); 
+assignin('base','Td_diff_temp',Td_diff); 
+assignin('base','heading_error_temp',heading_error); 
+assignin('base','lateral_error_temp',lateral_error); 
+assignin('base','speed_error_temp',speed_error); 
+assignin('base','proximity_temp',proximity); 
 

@@ -84,6 +84,13 @@ Usim_MPC            =   zeros(N_mpc_sim,nu);
 Zsim_MPC(1:nz,1)    =   z0;  
 % Zt filled with initial state
 zt                  =   z0; 
+% Cost Function entries vectors 
+delta_diff= zeros(N_mpc_sim,1); 
+Td_diff= zeros(N_mpc_sim,1); 
+heading_error= zeros(N_mpc_sim,1); 
+lateral_error= zeros(N_mpc_sim,1); 
+speed_error= zeros(N_mpc_sim,1); 
+proximity= zeros(N_mpc_sim,1); 
 
 % Iteration of the optimization process N_mpc_sim times
 for ind=1:N_mpc_sim
@@ -99,6 +106,13 @@ for ind=1:N_mpc_sim
     catch
         break;
     end
+    delta_diff(ind)=delta_diff_temp;
+    Td_diff(ind)= Td_diff_temp; 
+    heading_error(ind)= heading_error_temp; 
+    lateral_error(ind)= lateral_error_temp; 
+    speed_error(ind)= speed_error_temp; 
+    proximity(ind)= proximity_temp; 
+
     % Take from optimization variable vector only the value at first step of the horizon for each variable 
     u_actual = xstar(1:length(xstar)/nu:end,1);
     % For every iteration put 1-step horizon control variables into increasing position of Usim_MPC
@@ -127,28 +141,33 @@ envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_si
 MPCFig=figure;
 hold on;
 plot(Zsim_MPC(1:15:end,:), Zsim_MPC(2:15:end,:),"Marker","+");
-plot(Zsim_MPC(7:15:end,:), Zsim_MPC(8:15:end,:),"Marker","*");
-Zsim_MPC(1:15:end,:)
-Zsim_MPC(2:15:end,:)
-Zsim_MPC(3:15:end,:)
-Zsim_MPC(4:15:end,:)
-Zsim_MPC(5:15:end,:)
-Zsim_MPC(6:15:end,:)
-Zsim_MPC(7:15:end,:)
-Zsim_MPC(8:15:end,:)
-Zsim_MPC(9:15:end,:)
-Zsim_MPC(10:15:end,:)
-Zsim_MPC(11:15:end,:)
-Zsim_MPC(12:15:end,:)
-Zsim_MPC(13:15:end,:)
-Zsim_MPC(14:15:end,:)
-Zsim_MPC(15:15:end,:)
+% plot(Zsim_MPC(7:15:end,:), Zsim_MPC(8:15:end,:),"Marker","*");
+% Zsim_MPC(1:15:end,:)
+% Zsim_MPC(2:15:end,:)
+% Zsim_MPC(3:15:end,:)
+% Zsim_MPC(4:15:end,:)
+% Zsim_MPC(5:15:end,:)
+% Zsim_MPC(6:15:end,:)
+% Zsim_MPC(7:15:end,:)
+% Zsim_MPC(8:15:end,:)
+% Zsim_MPC(9:15:end,:)
+% Zsim_MPC(10:15:end,:)
+% Zsim_MPC(11:15:end,:)
+% Zsim_MPC(12:15:end,:)
+% Zsim_MPC(13:15:end,:)
+% Zsim_MPC(14:15:end,:)
+% Zsim_MPC(15:15:end,:)
+
 %% Debug plots
 debugFig=figure;
+%Define a rescaling space vector for MPC costs on space
+xMPC=Zsim_MPC(1:15:end,:)
+timeScaleMPC=1:xMPC(end)/N_mpc_sim:xMPC(end);
+
 set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
-subplot(2,3,1);plot(delta_diff);title('delta diff');
-subplot(2,3,2);plot(Td_diff);title('Td diff');
-subplot(2,3,3);plot(heading_error);title('heading error');
-subplot(2,3,4);plot(lateral_error);title('lateral error');
-subplot(2,3,5);plot(speed_error);title('speed error');
-subplot(2,3,6);plot(distance_nearest_vehicle_1);title('distance_nearest_vehicle_1');
+subplot(2,3,1);plot(timeScaleMPC',delta_diff);title('delta diff');
+subplot(2,3,2);plot(timeScaleMPC',Td_diff);title('Td diff');
+subplot(2,3,3);plot(timeScaleMPC',heading_error);title('heading error');
+subplot(2,3,4);plot(timeScaleMPC',lateral_error);title('lateral error');
+subplot(2,3,5);plot(timeScaleMPC',speed_error);title('speed error');
+subplot(2,3,6);plot(timeScaleMPC',proximity);title('proximity');
