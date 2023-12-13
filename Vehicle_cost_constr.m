@@ -120,7 +120,9 @@ h = [h;
 
 heading_error = PSI_sim;
 %Lateral error with respect to the lane reference
-lateral_error = y_ref(2) - XY_sim(:,2);
+% lateral_error = y_ref(2) - XY_sim(:,2);
+lateral_error = lateral_error_computation(y_ref, XY_sim(:,2)');
+
 %Speed error with respect to speed reference
 speed_error = V_ref - V_sim;
 %Proximity based on mahalanobis distance previously computed
@@ -131,7 +133,7 @@ proximity =  (1./distance_nearest_vehicle_1)'*(1./distance_nearest_vehicle_1) ..
 f       =   1e3*(delta_diff'*delta_diff)+ ...
             1e-5*(Td_diff'*Td_diff) + ...
             1e2*(heading_error'*heading_error) + ...
-            6e-1*(lateral_error'*lateral_error) + ...
+            6e-1*(lateral_error) + ...
             5e-2*(speed_error'*speed_error) + ...
             10* proximity;
 
