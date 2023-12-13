@@ -13,6 +13,11 @@ run('simPlannerInit.m');
 % Plant Model Settings Init
 run('plantModelInit.m');
 
+%% FHOCP parameters - single shooting
+Ts_optimization      =       0.5;                             % seconds, input sampling period
+Tend                 =       optimization_horizon_duration;   % seconds, terminal time
+Np                   =       Tend/Ts_optimization;            % prediction horizon
+
 %% Simulation Planner
 % Call function that gives x and y coordinate matrices of the N vehicles based on previous settings
 [x_simulated_cars, y_simulated_cars] = simPlanner(x0, lane0, vx_simulated_cars, tSwitch, laneSwitch, N_simulated_cars, entire_simulation_duration, Ts_simulation);
@@ -21,12 +26,8 @@ run('plantModelInit.m');
 t=1;
 x_ego = [z0_main(1)];
 y_ego = [z0_main(2)];
-[z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
+[z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, z0_main(1), z0_main(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation, Ts_optimization);
 
-%% FHOCP parameters - single shooting
-Ts_optimization      =       0.5;                             % seconds, input sampling period
-Tend                 =       optimization_horizon_duration;   % seconds, terminal time
-Np                   =       Tend/Ts_optimization;            % prediction horizon
 
 %% Initialize optimization variables
 % Optimization variables: [U_Cm, U_delta]
@@ -87,11 +88,11 @@ zt                  =   z0;
 % Iteration of the optimization process N_mpc_sim times
 for ind=1:N_mpc_sim
     % compute nearest vehicles states at current iteration, needed for constraints and costs definition
-    [z_neighboring, speeds_neighboring] = find_nearest_vehicles(t, zt(1), zt(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation);
+    [z_neighboring, speeds_neighboring] = find_nearest_vehicles(ind, zt(1), zt(2), x_simulated_cars, y_simulated_cars, vx_simulated_cars, Ts_simulation, Ts_optimization);
     % Adding to initial states of the ego vehicle the states of neighboring vehicles
     zt(7:end) = z_neighboring;
     % Define costs and constraints
-    fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,z0,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
+    fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,zt,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
     % Run solver
     [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
     % Take from optimization variable vector only the value at first step of the horizon for each variable 
@@ -103,13 +104,14 @@ for ind=1:N_mpc_sim
     % Simulate-Integrate the model to get the next initial state, simulate
     % it considering 1 control input applied for a time equal to the period
     % of one mpc step
-    [z_sim] = Vehicle_traj(xstar,Ts_optimization,1,th,zt, Ts_simulation);
+    [z_sim] = Vehicle_traj(xstar,Ts_optimization,6,th,zt(1:6), Ts_simulation);
     % Assign to zt last ego vehicle state to be transmitted to next cicle
-    zt = z_sim(:,end);
+    zt(1:6) = z_sim(:,end);
     % Update state at current MPC iteration
     Zsim_MPC((ind)*nz+1:(ind+1)*nz,1) = zt; 
     % Initial guess for optimization variables of next iteration
     x0=[xstar(2:end/2); xstar(end/2); xstar(end/2+2:end); xstar(end)];
+
 end
 
 
@@ -117,6 +119,27 @@ end
 % Custom App Call for environment visualization, animation and video saving
 envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 
+%% MPC States
+%Plot ego vehicle trajectory
+MPCFig=figure;
+hold on;
+plot(Zsim_MPC(1:15:end,:), Zsim_MPC(2:15:end,:),"Marker","+");
+plot(Zsim_MPC(7:15:end,:), Zsim_MPC(8:15:end,:),"Marker","*");
+Zsim_MPC(1:15:end,:)
+Zsim_MPC(2:15:end,:)
+Zsim_MPC(3:15:end,:)
+Zsim_MPC(4:15:end,:)
+Zsim_MPC(5:15:end,:)
+Zsim_MPC(6:15:end,:)
+Zsim_MPC(7:15:end,:)
+Zsim_MPC(8:15:end,:)
+Zsim_MPC(9:15:end,:)
+Zsim_MPC(10:15:end,:)
+Zsim_MPC(11:15:end,:)
+Zsim_MPC(12:15:end,:)
+Zsim_MPC(13:15:end,:)
+Zsim_MPC(14:15:end,:)
+Zsim_MPC(15:15:end,:)
 %% Debug plots
 debugFig=figure;
 set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed

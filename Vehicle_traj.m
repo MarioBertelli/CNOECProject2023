@@ -1,10 +1,10 @@
-function [z_sim] = Vehicle_traj(x,Ts,Np,th,z0_main, simulation_Ts)
+function [z_sim] = Vehicle_traj(x,Ts_optimization,Np,th,z0_main, Ts_simulation)
 % Function that computes the trajectory of the vehicle model
 % introduced in Lab. session A and returns the system state together with
 % plots of the relevant quantities
 
 %% Build vector of inputs
-t_in        =   [0:Ts:(Np-1)*Ts]';
+t_in        =   [0:Ts_optimization:(Np-1)*Ts_optimization]';
 u_in        =   [x(1:Np,1)';
                 x(Np+1:end,1)'];
 
@@ -14,16 +14,16 @@ assignin('base','u_in',u_in);
 
 
 %% Run simulation with FFD
-time_FFD    =   [0:simulation_Ts:((Np)*Ts-simulation_Ts)];
-Nblock      =   Ts/simulation_Ts;
+time_FFD    =   [0:Ts_simulation:((Np)*Ts_optimization-Ts_simulation)];
+Nblock      =   Ts_optimization/Ts_simulation;
 Nsim_FFD    =   length(time_FFD);
 
 z_sim      =   zeros(6,Nsim_FFD);
 z_sim(:,1) =   z0_main;
 for ind=2:Nsim_FFD
-    u                  =   u_in(:,1+floor(time_FFD(ind)/Ts));
+    u                  =   u_in(:,1+floor(time_FFD(ind)/Ts_optimization));
     zdot               =   vehicle(0,z_sim(:,ind-1),u,0,th);
-    z_sim(:,ind)       =   z_sim(:,ind-1)+Ts/Nblock*zdot;
+    z_sim(:,ind)       =   z_sim(:,ind-1)+Ts_optimization/Nblock*zdot;
 end
 
 X_sim       =   z_sim(1,1:end);
