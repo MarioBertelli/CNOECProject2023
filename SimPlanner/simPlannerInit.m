@@ -1,7 +1,7 @@
 %% Simulation Settings
 Ts_simulation = 1e-3;
-entire_simulation_duration = 6;
-optimization_horizon_duration = 3;
+entire_simulation_duration = 10;
+optimization_horizon_duration = 2;
 
 num_time_steps = entire_simulation_duration / Ts_simulation;
 %% Vehicles Settings
@@ -9,7 +9,7 @@ num_time_steps = entire_simulation_duration / Ts_simulation;
 N_simulated_cars = 8;  
 
 % Initial x coordinate of every vehicle
-x0=[48, 48, 50, 58, 60, 67, 72, 80] + 20;
+x0=[48, 48, 50, 58, 60, 67, 72, 80] + 40;
 
 % Constant velocity of every vehicle
 vx_simulated_cars=[3, 1, 10, 10, 8, 9, 8, 7];

@@ -79,7 +79,7 @@ N_mpc_sim = entire_simulation_duration / Ts_optimization;
 % Init of a vector big enough to contain all the states for all the iterations
 Zsim_MPC            =   zeros((N_mpc_sim+1)*nz,1); 
 % Init of a vector big enough to contain all the inputs for all the iterations
-Usim_MPC            =   zeros(N_mpc_sim*nu,1); 
+Usim_MPC            =   zeros(N_mpc_sim,nu); 
 % States of the initial iteration are the initial states
 Zsim_MPC(1:nz,1)    =   z0;  
 % Zt filled with initial state
@@ -94,11 +94,15 @@ for ind=1:N_mpc_sim
     % Define costs and constraints
     fun=@(x)Vehicle_cost_constr(x,Ts_optimization,Np,th,zt,speeds_neighboring,y_lanes,V_ref,C_proximity,C_dist,car_width);
     % Run solver
-    [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
+    try
+        [xstar,fxstar,niter,exitflag,xsequence] = myfmincon(fun,x0,[],[],C,d,0,q,myoptions);
+    catch
+        break;
+    end
     % Take from optimization variable vector only the value at first step of the horizon for each variable 
     u_actual = xstar(1:length(xstar)/nu:end,1);
     % For every iteration put 1-step horizon control variables into increasing position of Usim_MPC
-    Usim_MPC((ind-1)*nu+1:(ind)*nu,1) =   u_actual;
+    Usim_MPC(ind,:) =   u_actual;
     %u_actual = xstar(1:length(xstar)/2:end,1); % CREDO NON SEVA A NULLA <--------------
 
     % Simulate-Integrate the model to get the next initial state, simulate
@@ -116,7 +120,8 @@ end
 
 %% Visualize results
 % Custom App Call for environment visualization, animation and video saving
-[z_sim] = Vehicle_traj(u_actual,Ts_optimization,1,th,zt(1:6), Ts_simulation);
+flat_Usim_MPC = reshape(Usim_MPC, [], 1);
+[z_sim] = Vehicle_traj(flat_Usim_MPC,Ts_optimization,N_mpc_sim,th,Zsim_MPC(1:6), Ts_simulation);
 envVisualization(x_simulated_cars,y_simulated_cars, z_sim(1,:)',z_sim(2,:)',z_sim(5,:)', C_proximity, C_dist, car_width, car_length, y_lanes);
 
 %% MPC States

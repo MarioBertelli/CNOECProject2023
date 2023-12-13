@@ -8,7 +8,7 @@ t_in        =   [0:Ts_optimization:(Np-1)*Ts_optimization]';
 u_in        =   [x(1:Np,1)';
                 x(Np+1:end,1)'];
 
-assignin('base','z0',z0_main);
+% assignin('base','z0',z0_main);
 assignin('base','t_in',t_in);
 assignin('base','u_in',u_in);
 
