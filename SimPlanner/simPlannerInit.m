@@ -1,6 +1,6 @@
 %% Simulation Settings
 Ts_simulation = 1e-3;
-entire_simulation_duration = 10;
+entire_simulation_duration = 12;
 optimization_horizon_duration = 2;
 
 num_time_steps = entire_simulation_duration / Ts_simulation;
@@ -12,14 +12,14 @@ N_simulated_cars = 8;
 x0=[48, 48, 50, 58, 60, 67, 72, 80] + 40;
 
 % Constant velocity of every vehicle
-vx_simulated_cars=[3, 1, 10, 10, 8, 9, 8, 7];
+vx_simulated_cars=[4, 1, 9, 5, 4, 8, 7, 5];
 
 % Car width and length
 car_width = 1.5;
 car_length = 3;
 
 %% Speed reference Settings 
-V_ref = 80/3.6;
+V_ref = 90/3.6;
 
 %% Lanes Settings
 % Possible lanes references

@@ -82,9 +82,9 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         
         title('Environment Visualization'),xlabel('xSim [m]'),ylabel('ySim [m]');
         % Uncomment this for full street view
-        xlim([x_min, x_max]);
+        %xlim([x_min, x_max]);
         % Uncomment this for vehicle eye bird view
-        %xlim([x_ego(t) - x_view_before_after, x_ego(t) + x_view_before_after]);
+        xlim([x_ego(t) - x_view_before_after, x_ego(t) + x_view_before_after]);
         ylim([y_min, y_max]);
 
         % Draw lanes or other environmental elements

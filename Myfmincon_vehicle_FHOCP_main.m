@@ -103,8 +103,6 @@ for ind=1:N_mpc_sim
     u_actual = xstar(1:length(xstar)/nu:end,1);
     % For every iteration put 1-step horizon control variables into increasing position of Usim_MPC
     Usim_MPC(ind,:) =   u_actual;
-    %u_actual = xstar(1:length(xstar)/2:end,1); % CREDO NON SEVA A NULLA <--------------
-
     % Simulate-Integrate the model to get the next initial state, simulate
     % it considering 1 control input applied for a time equal to the period
     % of one mpc step
