@@ -1,4 +1,5 @@
 > recap del progetto (1 slide)
+(spiegare bene le motivazioni e sfide del progetto)
 >> idea di base 
 *immagine iniziale del problema della vecchia presentazione, magari un po modificata*
 >> utilizzo del modello "aumentato"
@@ -47,13 +48,23 @@ come abbiamo calcolato la proximity -> ellissi
 > fhocp -> mpc (1 slide)
 *plot??*
 
+> critica su risultati ottenuti
+
 > miglioramenti che portiamo in futuro (1 slide)
 >> cambio linea se non rusciamo ad implementarlo
 
 
 
 
+TODO:
+> migliorare plot (qualità immagine + grandezze live)
+> sensitivity
+> funzione errore lat
+> (velocità?)
+> 
 
+IMMAGINI:
+> 3 macchine vicine
 
 
 
