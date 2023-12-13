@@ -139,7 +139,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3
-            line([x_ego(t), x(t, nearest_indices(i))], [y_ego(t), y(t, nearest_indices(i))], 'LineStyle', ':', 'Color', [0.2, 0.2, 0.2]);
+            line([x_ego(t), x(t, nearest_indices(i))], [y_ego(t), y(t, nearest_indices(i))], 'LineStyle', ':', 'Color', [0, 0.5, 0], 'LineWidth', 2);
         end
 
         hold off;
