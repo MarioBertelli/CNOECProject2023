@@ -48,7 +48,8 @@ come abbiamo calcolato la proximity -> ellissi
 > fhocp -> mpc (1 slide)
 *plot??*
 
-> critica su risultati ottenuti
+> critica su risultati ottenuti:
+    - Criticare fatto che stiamo spostando a livello di controllo la scelta della traiettoria che potrebbe fallir e(Sistemi safety critical non accettabile fallimento)
 
 > miglioramenti che portiamo in futuro (1 slide)
 >> cambio linea se non rusciamo ad implementarlo

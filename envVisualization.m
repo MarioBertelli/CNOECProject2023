@@ -52,7 +52,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
     fig = figure;
 
     % Increase the figure size and resolution
-    set(fig, 'Position', [0, 0, 1500, 200]); % Adjust the size as needed
+    set(fig, 'Position', [0, 0, 1500, 800]); % Adjust the size as needed
     set(fig, 'PaperPositionMode', 'auto');
     set(fig, 'Renderer', 'Painters'); % Use the 'Painters' renderer for vector graphics
 
@@ -135,7 +135,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
         %Plot ellipse around ego vehigle, properly rotated
         
-        plot(ERot(1,:), ERot(2,:),'b');
+        %plot(ERot(1,:), ERot(2,:),'b');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3

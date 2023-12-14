@@ -14,7 +14,7 @@ run('simPlannerInit.m');
 run('plantModelInit.m');
 
 %% FHOCP parameters - single shooting
-Ts_optimization      =       0.5;                             % seconds, input sampling period
+Ts_optimization      =       0.25;                             % seconds, input sampling period
 Tend                 =       optimization_horizon_duration;   % seconds, terminal time
 Np                   =       Tend/Ts_optimization;            % prediction horizon
 
