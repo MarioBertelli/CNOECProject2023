@@ -35,7 +35,7 @@ FUNZIONE DI COSTO
 *video figo che cambiamo linea*
 
 > prossimità (1 slide)
->>abbiamo usato la definizione di bahesian distance
+>>abbiamo usato la definizione di Mehalanobis distance
 come abbiamo calcolato la proximity -> ellissi 
 >> abbiamo valutato prima altre soluzioni, in particolare il rettangolo ma non era una funzione continua (era definita per parti)
 *video figo dove ci sono le macchine e le ellissi e non si scontrano*

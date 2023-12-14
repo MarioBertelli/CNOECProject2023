@@ -106,6 +106,8 @@ for ind=1:N_mpc_sim
     catch
         break;
     end
+
+    % Accumulate cost function entries values for every iteration
     delta_diff(ind)=delta_diff_temp;
     Td_diff(ind)= Td_diff_temp; 
     heading_error(ind)= heading_error_temp; 
@@ -163,11 +165,10 @@ debugFig=figure;
 %Define a rescaling space vector for MPC costs on space
 xMPC=Zsim_MPC(1:15:end,:)
 timeScaleMPC=1:xMPC(end)/N_mpc_sim:xMPC(end);
-
 set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
-subplot(2,3,1);plot(timeScaleMPC',delta_diff);title('delta diff');
-subplot(2,3,2);plot(timeScaleMPC',Td_diff);title('Td diff');
-subplot(2,3,3);plot(timeScaleMPC',heading_error);title('heading error');
-subplot(2,3,4);plot(timeScaleMPC',lateral_error);title('lateral error');
-subplot(2,3,5);plot(timeScaleMPC',speed_error);title('speed error');
-subplot(2,3,6);plot(timeScaleMPC',proximity);title('proximity');
+subplot(2,3,1);plot(timeScaleMPC',delta_diff);title('Delta diff');grid on;
+subplot(2,3,2);plot(timeScaleMPC',Td_diff);title('Td diff');grid on;
+subplot(2,3,3);plot(timeScaleMPC',heading_error);title('Heading error');grid on;
+subplot(2,3,4);plot(timeScaleMPC',lateral_error);title('Lateral error');grid on;
+subplot(2,3,5);plot(timeScaleMPC',speed_error);title('Speed error');grid on;
+subplot(2,3,6);plot(timeScaleMPC',proximity);title('Proximity');grid on;
