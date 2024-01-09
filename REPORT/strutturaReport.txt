@@ -1,0 +1,35 @@
+INTRODUCTION
+- Context and Goal
+- Notation
+
+SYSTEM DESCRIPTION AND MODEL
+-System subdivision
+	- Simulation
+		- Vehicle Model
+		- Simulation Planner
+		- Environment Graphics
+	- Control
+- System model
+
+OPTIMAL CONTROL SYSTEM DESIGN
+- Problem Abstraction
+- Constraints
+	- Linear Inequality Constraints
+	- Mahalanobis Distance
+	- Non-Linear Inequality Constraints
+- Cost Function
+	- Tracking
+	- Lateral Error: Differentiable minimum function
+	- Control Action Rate
+	- Collision avoidance
+	- Proximity definition
+- Finite Horizon Optimal Control Problem Formulation
+- Model Predictive Control formulation
+SIMULATION RESULTS ANALYSIS
+- Da capire cosa vogliamo mostrare e se vogliamo fare altre analisi
+
+CONCLUSIONS
+
+MATLAB SCRIPTs
+
+REFERENCES
