@@ -33,3 +33,46 @@ CONCLUSIONS
 MATLAB SCRIPTs
 
 REFERENCES
+
+
+I sistemi di cui ti parlavo si chimano in gergo "sistemi di assistenza alla guida". Di solito le macchine ne hanno alcuni di serie, quelli base tipo il cruise control (Setti la velocita a cui vuoi andare tipo in autostrada e poi non devi più accelerare, si disinserisce quando tocchi il freno. Quello con cui smanettaov mentre andavamo in croazia AHAHAHHA), mentre la maggior parte sono optional e tendenzialmente te li fanno pagare profumatamente, ma lcuni sono dei salvavita, tua e di chi rischi di investire, quindi li valgono tutti quei soldi.
+Prendo come esempio quelli disponibili sulla Classe A che essendo una mercedes è un ottimo esempio:
+-Fari Intelligenti: Si muovono a destra e sinistra mentre curvi e siccome sono fatti con una matrice di led indipendenti spengono i led che puntano le macchine che ti vengono in contro permettendoti di tenere accesi gli abbaglianti senza accecare gli altri. In pratica massimizzi quello che vedi al buio senza mai dover spegnere gli abbaglianti. (Commento: Sulla malegno borno che è il tuo maggior utilizzo possono aver senso ed essere comodi, non fondamentali ecco)
+-Sistema di assistenza alla frenata attivo: Prendilo. Ti avvisa in modo acustico della presenza improvvisa di veicoli nelle vicinanze fino ad arrivare a frenare in automatico. E' il classico sistema che riduce le probabilità di investire un bambino che attraversa la strada a caso
+- Blind Spot Assist: è un sistema che controllo gli angoli ciechi della macchina. in pratica se in autostrada cambi corsia senza vedere che arriva uno ti da allarme acustico oppure se apri la portiera da ferma mentre arriva una macchina stessa cosa. Non fondamental eper te che in autostrada ci vai poco.
+-Sistema antisbandamento attivo: è quello che ti irrigidisce il volnte e in caso sterza automaticamente se stai uscendo dalla corsia senza aver messo la freccia. E' quello che avrebbe probabilmente salvato dall'incidente quel tuo collega che mi dicevi. prendilo.
+-Pacchetto parcheggio con telecamera a 360°: ti fornisce sullo schermo una visualizzazione 3D di tutta la macchina con gli ostacoli intorno che magari dalla posizione di guida non vedi. E' un qualcosa in più rispetto ai sensori di parcheggio classici. Vedi tu, secondo me costa un botto e visto che non sei impedita nei parcheggi ce la fai benissimo senza
+
+Se non l'hai ancora guardata bene guardati sta pagina con tutti i dati della classe A, ho trovato qui queste info https://www.mercedes-benz.it/passengercars/models/hatchback/a-class/overview.html. Nella sezione Equipaggiamenti trovi queste info e anche altri optional che puoi scegliere non riguardanti la sicurezza, tipo l'apertura con le chiavi in tasca tipo la captur ecc...
+
+
+20 CFU TAB1 E TAB2 TOT:25
+- CNOEC 5
+- ACHEV 5
+- DDCSD 5
+- HIGH TECH ENTREPRENEURSHIP 5
+- POWER ELECTRONICS 5
+
+
+MAX 10 CFU TRASVERSAL SKILLS
+-Patents and Intellectual Property 5
+
+MAX 10 CFU ESAMI EXTRA CORSO
+
+Cosa devo seguire nel secondo semestre: 
+- AAMC
+- DEMD
+- High tech
+- Electr. comp.
+- Lab
+- Software eng.
+
+
+Esami carini trovati:
+097558 - VEHICLE DESIGN (OPTIMAL DESIGN)
+
+ESAMI Da TAB2 e TAB4 che potrei mettere da 5CFU
+- Advanced Measurement Systems for Control Applications (Possibilità di progetto di gruppo al posto di esame scritto, poi c'è orale)
+- Capire bene come funziona project work
+
+
