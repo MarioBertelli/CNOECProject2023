@@ -36,14 +36,14 @@ YfirstLine       =   X_sim*0+3.5;
 YsecondLine      =   X_sim*0+6.5;
 
 
-figure(1),subplot(2,2,1),plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--'),grid on
-xlabel('X (m)'),ylabel('Y (m)')
-subplot(2,2,2),plot(time_FFD,z_sim(3,:)),grid on
-xlabel('Time (s)'),ylabel('Longitudinal speed (m/s)')
-subplot(2,2,3),plot(t_in,u_in(2,:)),grid on
-xlabel('Time (s)'),ylabel('Front steering angle (rad)')
-subplot(2,2,4),plot(t_in,u_in(1,:),"Marker","+"),grid on
-xlabel('Time (s)'),ylabel('Driving torque (Nm)')
+% figure(1),subplot(2,2,1),plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--'),grid on
+% xlabel('X (m)'),ylabel('Y (m)')
+% subplot(2,2,2),plot(time_FFD,z_sim(3,:)),grid on
+% xlabel('Time (s)'),ylabel('Longitudinal speed (m/s)')
+% subplot(2,2,3),plot(t_in,u_in(2,:)),grid on
+% xlabel('Time (s)'),ylabel('Front steering angle (rad)')
+% subplot(2,2,4),plot(t_in,u_in(1,:),"Marker","+"),grid on
+% xlabel('Time (s)'),ylabel('Driving torque (Nm)')
 
 
 trajFig=figure;

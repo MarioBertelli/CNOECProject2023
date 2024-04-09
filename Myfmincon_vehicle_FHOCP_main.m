@@ -162,6 +162,7 @@ plot(Zsim_MPC(1:15:end,:), Zsim_MPC(2:15:end,:),"Marker","+");
 
 %% Debug and report plots
 debugFig=figure;
+set(debugFig, 'Position', [0, 0, 1200, 1800]); % Adjust the size as needed
 fname = 'your figure';
 %Define a rescaling space vector for MPC costs on space
 xMPC=Zsim_MPC(1:15:end,:);
@@ -173,11 +174,11 @@ set(findall(debugFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to
 
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
 set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(debugFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
+%set(debugFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
 set(gca,'TickLabelInterpreter','latex','FontSize',14);
 print(debugFig,fname,'-dpng','-painters')
 
-subplot(2,3,1);plot(timeScaleMPC',delta_diff,'LineWidth',3);title('\textbf{Delta diff}','Interpreter','latex');grid on;
+subplot(6,1,1);plot(timeScaleMPC',delta_diff,'LineWidth',3);title('\textbf{Delta diff}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('$delta Diff$ [rad/s]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
@@ -185,7 +186,7 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-subplot(2,3,2);plot(timeScaleMPC',Td_diff,'LineWidth',3);title('\textbf{Td diff}','Interpreter','latex');grid on;
+subplot(6,1,2);plot(timeScaleMPC',Td_diff,'LineWidth',3);title('\textbf{Td diff}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('$Td Diff$ [$Nm/s$]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
@@ -193,7 +194,7 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-subplot(2,3,3);plot(timeScaleMPC',heading_error,'LineWidth',3);title('\textbf{Heading error}','Interpreter','latex');grid on;
+subplot(6,1,3);plot(timeScaleMPC',heading_error,'LineWidth',3);title('\textbf{Heading error}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('$Heading Error$ [rad]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
@@ -201,7 +202,7 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-subplot(2,3,4);plot(timeScaleMPC',lateral_error,'LineWidth',3);title('\textbf{Lateral error}','Interpreter','latex');grid on;
+subplot(6,1,4);plot(timeScaleMPC',lateral_error,'LineWidth',3);title('\textbf{Lateral error}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('$Lateral Error$ [$m$]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
@@ -209,7 +210,7 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-subplot(2,3,5);plot(timeScaleMPC',speed_error,'LineWidth',3);title('\textbf{Speed error}','Interpreter','latex');grid on;
+subplot(6,1,5);plot(timeScaleMPC',speed_error,'LineWidth',3);title('\textbf{Speed error}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('$Speed Error$ [$m/s$]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
@@ -217,7 +218,7 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-subplot(2,3,6);plot(timeScaleMPC',proximity,'LineWidth',3);title('\textbf{Proximity}','Interpreter','latex');grid on;
+subplot(6,1,6);plot(timeScaleMPC',proximity,'LineWidth',3);title('\textbf{Proximity}','Interpreter','latex');grid on;
 xlabel('X [$m$]','Interpreter','latex');
 ylabel('Proximity [$m$]','Interpreter','latex');
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
