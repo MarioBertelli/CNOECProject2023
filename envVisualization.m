@@ -50,6 +50,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
 
     % Create a figure and set the axis limits
     fig = figure;
+    fname = 'your figure';
 
     % Increase the figure size and resolution
     set(fig, 'Position', [0, 0, 1500, 800]); % Adjust the size as needed
@@ -80,7 +81,9 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         % Set the axis limits to maintain fixed dimensions
         axis equal;
         
-        title('Environment Visualization'),xlabel('xSim [m]'),ylabel('ySim [m]');
+        title('Environment Visualization','Interpreter','latex'),xlabel('X[m]','Interpreter','latex'),ylabel('Y[m]','Interpreter','latex');
+        set(gca,'TickLabelInterpreter','latex','FontSize',20);
+        print(fig,fname,'-dpng','-painters');
         % Uncomment this for full street view
         %xlim([x_min, x_max]);
         % Uncomment this for vehicle eye bird view
@@ -109,8 +112,8 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         %Plot other vehicles
         for i = 1:size(x, 2)
             rectangle('Position', [x(t, i) - car_length/2, y(t, i) - car_width/2, car_length, car_width], 'EdgeColor', 'r', 'FaceColor', 'r');
-            text(x(t, i), y(t, i), num2str(i), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
-            plot(xe(i,:), ye(i,:), 'r');
+            text(x(t, i), y(t, i), num2str(i), 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w','FontSize',16);
+            plot(xe(i,:), ye(i,:), 'r','LineWidth',1.5);
         end
 
         % Draw the ego vehicle as a blue rectangle
@@ -131,15 +134,15 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         ego_shape = rotate(ego_shape, theta_ego(t) * 360 / 2.0 / pi, [x_ego(t), y_ego(t)]);
         
         % Plot the ego vehicle
-        plot(ego_shape, 'FaceColor', 'b', 'EdgeColor', 'b');
-        text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w');
+        plot(ego_shape, 'FaceColor', 'b', 'EdgeColor', 'b','LineWidth',1.5);
+        text(x_ego(t), y_ego(t), 'Ego', 'HorizontalAlignment', 'center', 'VerticalAlignment', 'middle', 'Color', 'w','FontSize',16);
         %Plot ellipse around ego vehigle, properly rotated
         
         %plot(ERot(1,:), ERot(2,:),'b');
 
         % Draw dashed lines between ego vehicle and three nearest vehicles
         for i = 1:3
-            line([x_ego(t), x(t, nearest_indices(i))], [y_ego(t), y(t, nearest_indices(i))], 'LineStyle', ':', 'Color', [0, 0.5, 0], 'LineWidth', 2);
+            line([x_ego(t), x(t, nearest_indices(i))], [y_ego(t), y(t, nearest_indices(i))], 'LineStyle', ':', 'Color', [0, 0.5, 0], 'LineWidth', 3);
         end
 
         hold off;
@@ -154,7 +157,6 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
 
         % You can also add a delay to control the animation speed
         pause(0.01); % Set the desired delay in seconds
-
     end
 
     % Close the video file

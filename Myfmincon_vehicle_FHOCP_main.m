@@ -162,13 +162,79 @@ plot(Zsim_MPC(1:15:end,:), Zsim_MPC(2:15:end,:),"Marker","+");
 
 %% Debug plots
 debugFig=figure;
+fname = 'your figure';
 %Define a rescaling space vector for MPC costs on space
-xMPC=Zsim_MPC(1:15:end,:)
+xMPC=Zsim_MPC(1:15:end,:);
 timeScaleMPC=1:xMPC(end)/N_mpc_sim:xMPC(end);
-set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
-subplot(2,3,1);plot(timeScaleMPC',delta_diff);title('Delta diff');grid on;
-subplot(2,3,2);plot(timeScaleMPC',Td_diff);title('Td diff');grid on;
-subplot(2,3,3);plot(timeScaleMPC',heading_error);title('Heading error');grid on;
-subplot(2,3,4);plot(timeScaleMPC',lateral_error);title('Lateral error');grid on;
-subplot(2,3,5);plot(timeScaleMPC',speed_error);title('Speed error');grid on;
-subplot(2,3,6);plot(timeScaleMPC',proximity);title('Proximity');grid on;
+
+% set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
+% set(gca,'TickLabelInterpreter','latex','FontSize',20);
+% set(findall(debugFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
+% fname = 'your figure';
+% print(debugFig,fname,'-dpng','-painters');
+
+picturewidth = 30; % set this parameter and keep it forever
+hw_ratio = 0.65; % feel free to play with this ratio
+set(findall(debugFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
+
+% set(findall(hfig,'-property','Box'),'Box','off') % optional
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(debugFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
+
+% print(hfig,fname,'-dpdf','-painters','-fillpage')
+
+% set the number of legend you want
+%set(findall(lgd1, '-property', 'FontSize'), 'FontSize', 11)
+
+set(gca,'TickLabelInterpreter','latex','FontSize',14);
+
+print(debugFig,fname,'-dpng','-painters')
+
+subplot(2,3,1);plot(timeScaleMPC',delta_diff,'LineWidth',3);title('\textbf{Delta diff}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('$delta Diff$ [rad/s]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');
+
+subplot(2,3,2);plot(timeScaleMPC',Td_diff,'LineWidth',3);title('\textbf{Td diff}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('$Td Diff$ [$Nm/s$]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');
+
+subplot(2,3,3);plot(timeScaleMPC',heading_error,'LineWidth',3);title('\textbf{Heading error}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('$Heading Error$ [rad]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');
+
+subplot(2,3,4);plot(timeScaleMPC',lateral_error,'LineWidth',3);title('\textbf{Lateral error}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('$Lateral Error$ [$m$]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');
+
+subplot(2,3,5);plot(timeScaleMPC',speed_error,'LineWidth',3);title('\textbf{Speed error}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('$Speed Error$ [$m/s$]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');
+
+subplot(2,3,6);plot(timeScaleMPC',proximity,'LineWidth',3);title('\textbf{Proximity}','Interpreter','latex');grid on;
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('Proximity [$m$]','Interpreter','latex');
+set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(debugFig,fname,'-dpng','-painters');

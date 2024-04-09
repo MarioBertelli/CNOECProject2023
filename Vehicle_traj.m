@@ -35,6 +35,7 @@ Ymax        =   X_sim*0+0.5;
 YfirstLine       =   X_sim*0+3.5;
 YsecondLine      =   X_sim*0+6.5;
 
+
 figure(1),subplot(2,2,1),plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--'),grid on
 xlabel('X (m)'),ylabel('Y (m)')
 subplot(2,2,2),plot(time_FFD,z_sim(3,:)),grid on
@@ -43,6 +44,32 @@ subplot(2,2,3),plot(t_in,u_in(2,:)),grid on
 xlabel('Time (s)'),ylabel('Front steering angle (rad)')
 subplot(2,2,4),plot(t_in,u_in(1,:),"Marker","+"),grid on
 xlabel('Time (s)'),ylabel('Driving torque (Nm)')
+
+
+trajFig=figure;
+fname = 'your figure';
+picturewidth = 30; % set this parameter and keep it forever
+hw_ratio = 0.65; % feel free to play with this ratio
+set(findall(trajFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
+
+
+set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(trajFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
+
+set(gca,'TickLabelInterpreter','latex','FontSize',14);
+
+print(trajFig,fname,'-dpng','-painters')
+
+
+plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
+title('Ego vehicle trajectory');
+xlabel('X [$m$]','Interpreter','latex');
+ylabel('Y [$m$]','Interpreter','latex');
+set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
+set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+set(gca,'TickLabelInterpreter','latex','FontSize',16);
+print(trajFig,fname,'-dpng','-painters');
 
 
 

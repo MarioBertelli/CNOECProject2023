@@ -1,6 +1,6 @@
 %%STANDARD IMAGE CREATOR FOR THE REPORT
 fig=figure;
-plot(delta_diff, 'b-','LineWidth',3);
+plot(Xa_id,Xp_id,Xa_id, 'b-','LineWidth',3);
 title("Delta Diff",'Interpreter','latex');
 xlabel('Space [m]','Interpreter','latex'); 
 ylabel('Error [-]','Interpreter','latex');
