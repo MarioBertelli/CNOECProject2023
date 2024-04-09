@@ -45,6 +45,13 @@ YsecondLine      =   X_sim*0+6.5;
 % subplot(2,2,4),plot(t_in,u_in(1,:),"Marker","+"),grid on
 % xlabel('Time (s)'),ylabel('Driving torque (Nm)')
 
+%% Assign to workspace some useful 'global' quantities
+assignin('base','X_sim',X_sim); 
+assignin('base','Y_sim',Y_sim); 
+assignin('base','YfirstLine',YfirstLine); 
+assignin('base','YsecondLine',YsecondLine); 
+assignin('base','Ymin',Ymin);
+assignin('base','Ymax',Ymax);
 
 trajFig=figure;
 fname = 'your figure';
@@ -62,14 +69,14 @@ set(gca,'TickLabelInterpreter','latex','FontSize',14);
 print(trajFig,fname,'-dpng','-painters')
 
 
-plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
-title('Ego vehicle trajectory');
-xlabel('X [$m$]','Interpreter','latex');
-ylabel('Y [$m$]','Interpreter','latex');
-set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
-set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(gca,'TickLabelInterpreter','latex','FontSize',16);
-print(trajFig,fname,'-dpng','-painters');
+% plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
+% title('Ego vehicle trajectory');
+% xlabel('X [$m$]','Interpreter','latex');
+% ylabel('Y [$m$]','Interpreter','latex');
+% set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
+% set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+% set(gca,'TickLabelInterpreter','latex','FontSize',16);
+% print(trajFig,fname,'-dpng','-painters');
 
 
 
