@@ -160,35 +160,21 @@ plot(Zsim_MPC(1:15:end,:), Zsim_MPC(2:15:end,:),"Marker","+");
 % Zsim_MPC(14:15:end,:)
 % Zsim_MPC(15:15:end,:)
 
-%% Debug plots
+%% Debug and report plots
 debugFig=figure;
 fname = 'your figure';
 %Define a rescaling space vector for MPC costs on space
 xMPC=Zsim_MPC(1:15:end,:);
 timeScaleMPC=1:xMPC(end)/N_mpc_sim:xMPC(end);
 
-% set(debugFig, 'Position', [0, 270, 1500, 530]); % Adjust the size as needed
-% set(gca,'TickLabelInterpreter','latex','FontSize',20);
-% set(findall(debugFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
-% fname = 'your figure';
-% print(debugFig,fname,'-dpng','-painters');
-
 picturewidth = 30; % set this parameter and keep it forever
 hw_ratio = 0.65; % feel free to play with this ratio
 set(findall(debugFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
 
-% set(findall(hfig,'-property','Box'),'Box','off') % optional
 set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
 set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
 set(debugFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
-
-% print(hfig,fname,'-dpdf','-painters','-fillpage')
-
-% set the number of legend you want
-%set(findall(lgd1, '-property', 'FontSize'), 'FontSize', 11)
-
 set(gca,'TickLabelInterpreter','latex','FontSize',14);
-
 print(debugFig,fname,'-dpng','-painters')
 
 subplot(2,3,1);plot(timeScaleMPC',delta_diff,'LineWidth',3);title('\textbf{Delta diff}','Interpreter','latex');grid on;
