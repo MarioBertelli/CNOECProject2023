@@ -53,20 +53,20 @@ assignin('base','YsecondLine',YsecondLine);
 assignin('base','Ymin',Ymin);
 assignin('base','Ymax',Ymax);
 
-trajFig=figure;
-fname = 'your figure';
-picturewidth = 30; % set this parameter and keep it forever
-hw_ratio = 0.65; % feel free to play with this ratio
-set(findall(trajFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
-
-
-set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
-set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(trajFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
-
-set(gca,'TickLabelInterpreter','latex','FontSize',14);
-
-print(trajFig,fname,'-dpng','-painters')
+% trajFig=figure;
+% fname = 'your figure';
+% picturewidth = 30; % set this parameter and keep it forever
+% hw_ratio = 0.65; % feel free to play with this ratio
+% set(findall(trajFig,'-property','FontSize'),'FontSize',22) % adjust fontsize to your document
+% 
+% 
+% set(findall(trajFig,'-property','Interpreter'),'Interpreter','latex') 
+% set(findall(trajFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+% set(trajFig,'Units','centimeters','Position',[3 3 picturewidth hw_ratio*picturewidth])
+% 
+% set(gca,'TickLabelInterpreter','latex','FontSize',14);
+% 
+% print(trajFig,fname,'-dpng','-painters')
 
 
 % plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
