@@ -235,33 +235,33 @@ set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter',
 set(gca,'TickLabelInterpreter','latex','FontSize',16);
 print(debugFig,fname,'-dpng','-painters');
 
-secondFig=figure;
-set(secondFig, 'Position', [0, 0, 1200, 2100/7*3]); % Adjust the size as needed
-
-subplot(3,1,1);plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
-title('\textbf{Ego vehicle trajectory}','Interpreter','latex');
-xlabel('X [$m$]','Interpreter','latex');
-ylabel('Y [$m$]','Interpreter','latex');
-set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
-set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(gca,'TickLabelInterpreter','latex','FontSize',16);
-print(debugFig,fname,'-dpng','-painters');
-
-subplot(3,1,2);plot(timeScaleMPC',speed_error,'LineWidth',3);title('\textbf{Speed error}','Interpreter','latex');grid on;
-xlabel('X [$m$]','Interpreter','latex');
-ylabel('$Speed Error$ [$m/s$]','Interpreter','latex');
-set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
-set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(gca,'TickLabelInterpreter','latex','FontSize',16);
-print(debugFig,fname,'-dpng','-painters');
-
-subplot(3,1,3);plot(timeScaleMPC',proximity,'LineWidth',3);title('\textbf{Proximity}','Interpreter','latex');grid on;
-xlabel('X [$m$]','Interpreter','latex');
-ylabel('Proximity [$m$]','Interpreter','latex');
-set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
-set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
-set(gca,'TickLabelInterpreter','latex','FontSize',16);
-print(debugFig,fname,'-dpng','-painters');
+% secondFig=figure;
+% set(secondFig, 'Position', [0, 0, 1200, 2100/7*3]); % Adjust the size as needed
+% 
+% subplot(3,1,1);plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
+% title('\textbf{Ego vehicle trajectory}','Interpreter','latex');
+% xlabel('X [$m$]','Interpreter','latex');
+% ylabel('Y [$m$]','Interpreter','latex');
+% set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+% set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+% set(gca,'TickLabelInterpreter','latex','FontSize',16);
+% print(debugFig,fname,'-dpng','-painters');
+% 
+% subplot(3,1,2);plot(timeScaleMPC',speed_error,'LineWidth',3);title('\textbf{Speed error}','Interpreter','latex');grid on;
+% xlabel('X [$m$]','Interpreter','latex');
+% ylabel('$Speed Error$ [$m/s$]','Interpreter','latex');
+% set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+% set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+% set(gca,'TickLabelInterpreter','latex','FontSize',16);
+% print(debugFig,fname,'-dpng','-painters');
+% 
+% subplot(3,1,3);plot(timeScaleMPC',proximity,'LineWidth',3);title('\textbf{Proximity}','Interpreter','latex');grid on;
+% xlabel('X [$m$]','Interpreter','latex');
+% ylabel('Proximity [$m$]','Interpreter','latex');
+% set(findall(debugFig,'-property','Interpreter'),'Interpreter','latex') 
+% set(findall(debugFig,'-property','TickLabelInterpreter'),'TickLabelInterpreter','latex')
+% set(gca,'TickLabelInterpreter','latex','FontSize',16);
+% print(debugFig,fname,'-dpng','-painters');
 % trajFig=figure;
 % plot(X_sim,Y_sim,X_sim,Ymin,'k',X_sim,Ymax,'k',X_sim,YfirstLine,'k--',X_sim,YsecondLine,'k--','LineWidth',3),grid on
 % title('Ego vehicle trajectory');

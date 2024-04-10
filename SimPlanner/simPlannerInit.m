@@ -12,7 +12,7 @@ N_simulated_cars = 8;
 x0=[8, 9, 8, 12, 70, 80, 72, 80]+40;
 
 % Constant velocity of every vehicle
-vx_simulated_cars=[5, 5, 5, 22, 10, 25, 28, 29];
+vx_simulated_cars=[7, 6, 5, 22, 10, 25, 28, 29];
 
 % Car width and length
 car_width = 1.5;
@@ -40,7 +40,7 @@ laneSwitch = lane0;
 %% Distance Ellipse Constraint Settings
 % Define covariance matrix for the proximity ellipse cost function entry
 C_proximity     =   [3  0;
-                     0  2;];
+                     0  1;];
 % Define covariance matrix for the distance ellipse constraint
 C_dist          =   [1.2  0;
                      0  6;];
