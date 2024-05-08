@@ -83,7 +83,7 @@ function envVisualization(x, y, x_ego, y_ego, theta_ego, C_proximity, C_dist, ca
         
         title('Environment Visualization','Interpreter','latex'),xlabel('X[m]','Interpreter','latex'),ylabel('Y[m]','Interpreter','latex');
         set(gca,'TickLabelInterpreter','latex','FontSize',20);
-        print(fig,fname,'-dpng','-painters');
+        % print(fig,fname,'-dpng','-painters');
         % Uncomment this for full street view
         %xlim([x_min, x_max]);
         % Uncomment this for vehicle eye bird view
