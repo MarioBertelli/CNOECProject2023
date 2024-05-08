@@ -1,0 +1,72 @@
+> recap del progetto (1 slide)
+(spiegare bene le motivazioni e sfide del progetto)
+>> idea di base 
+*immagine iniziale del problema della vecchia presentazione, magari un po modificata*
+>> utilizzo del modello "aumentato"
+*immagine zoomata con le linee tratteggiate tra ego e tre più vicini*
+>> dove ci siamo lasciati 
+
+
+IMPLEMENTAZIONE DEL PROGETTO
+> descrizione di come sono fatti i constraints e la funzione di costo (1 slide)
+>> formulazione matematica dell'intero problema
+>> dire che matrici usiamo e quali sono vuote NOTA non abbiamo g(x) ma sono h(x)
+
+
+CONSTRAINTS
+> lineari (matrici C e d) (1 slide)
+>> setpoint di velocità e corsia
+
+> non lineari (h(x)) (2 slide di cui 1 solo per la distanza)
+>> saturazioni derivate angolo sterzo
+>> saturazioni coppia
+>> velocità massima
+>> corsie max e min
+>> distanza: considerando distanza tra centro di un veicolo e punto iù vicino dell'ellisse di un altro
+implementazione ellissi Mahalanobis distance
+*Plot per dimostrare che i constraint sono soddisfatti, in particolare le saturazioni*
+
+
+FUNZIONE DI COSTO 
+> descrizione di tutte le entry (delta_diff, Td_diff, heading_error, lateral_error, speed_error) tranne proximity e cambio linea (1 slide)
+
+> cambio linea che è ancora da implementare (1 slide SOLO SE LO IMPLEMENTIAMO)
+>> dubbi sull'utilizzo del parametro L1 L2 L3 -> funziona anche se viene definita come variabile continua
+*video figo che cambiamo linea*
+
+> prossimità (1 slide)
+>>abbiamo usato la definizione di Mehalanobis distance
+come abbiamo calcolato la proximity -> ellissi 
+>> abbiamo valutato prima altre soluzioni, in particolare il rettangolo ma non era una funzione continua (era definita per parti)
+*video figo dove ci sono le macchine e le ellissi e non si scontrano*
+*plot delle entry nella funzione di costo* -> per far vedere sul grafico quello che si vede a video
+
+> taratura/sensitivity analysis sulla variazione dei costi (1 slide)
+*arebbe fighissimo fare uno scriptino che fa girare più volte l'ottimizzazione con pesi diversi e fa vedere diverse traiettorie in base al peso*
+
+
+> fhocp -> mpc (1 slide)
+*plot??*
+
+> critica su risultati ottenuti:
+    - Criticare fatto che stiamo spostando a livello di controllo la scelta della traiettoria che potrebbe fallir e(Sistemi safety critical non accettabile fallimento)
+
+> miglioramenti che portiamo in futuro (1 slide)
+>> cambio linea se non rusciamo ad implementarlo
+
+
+
+
+TODO:
+> migliorare plot (qualità immagine + grandezze live)
+> sensitivity
+> funzione errore lat
+> (velocità?)
+> 
+
+IMMAGINI:
+> 3 macchine vicine
+
+
+
+
