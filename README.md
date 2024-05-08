@@ -37,3 +37,21 @@ The control system is based on Model Predictive Control (MPC) and is developed a
 
 ## Model
 The main model is the single-track model of the ego vehicle, along with constant speed dynamics models of the three nearest vehicles
+
+## Video
+
+https://github.com/MarioBertelli/CNOECProject2023/assets/32597982/115a447e-2146-4e9e-a9ec-5c7201221d0b
+
+
+https://github.com/MarioBertelli/CNOECProject2023/assets/32597982/3868dc2a-bfb5-4161-ab32-ce018d573d25
+
+
+
+
+https://github.com/MarioBertelli/CNOECProject2023/assets/32597982/0bcf8c0d-6092-4bd2-a93b-cd58955f9883
+
+
+
+
+https://github.com/MarioBertelli/CNOECProject2023/assets/32597982/4c6db2d7-d2f4-4960-95e9-4bd6dd38400f
+
